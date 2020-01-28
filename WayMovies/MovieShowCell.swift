@@ -8,41 +8,48 @@
 
 import UIKit
 
-class MovieShowCell: UICollectionViewCell {
+class TVCell: UICollectionViewCell {
     
     private let labelHeight:CGFloat = 50
+    private let labelWidth:CGFloat = 175
     
     let imageView: UIImageView = {
-        let image = UIImageView()
-        image.translatesAutoresizingMaskIntoConstraints = false
-        image.contentMode = .scaleAspectFill
-        image.clipsToBounds = true
-        image.backgroundColor = UIColor.blue
-        return image
+        let label = UIImageView()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.contentMode = .scaleAspectFill
+        label.clipsToBounds = true
+        label.backgroundColor = UIColor.darkGray
+        return label
     }()
     
     var titleLabel: UILabel = {
-        let title = UILabel()
-        title.translatesAutoresizingMaskIntoConstraints = false
-        title.textAlignment = .center
-        title.textColor = .black
-        return title
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.textColor = .white
+        label.numberOfLines = 0
+        label.sizeToFit()
+        return label
     }()
     
     var typeLabel: UILabel = {
-        let type = UILabel()
-        type.translatesAutoresizingMaskIntoConstraints = false
-        type.textAlignment = .center
-        type.textColor = .black
-        return type
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.textColor = .white
+        label.numberOfLines = 0
+        label.sizeToFit()
+        return label
     }()
     
     var ratingLabel: UILabel = {
-        let rating = UILabel()
-        rating.translatesAutoresizingMaskIntoConstraints = false
-        rating.textAlignment = .center
-        rating.textColor = .black
-        return rating
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.textColor = .white
+        label.numberOfLines = 0
+        label.sizeToFit()
+        return label
     }()
     
     override init(frame: CGRect) {
@@ -74,7 +81,8 @@ class MovieShowCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            titleLabel.heightAnchor.constraint(equalToConstant: labelHeight)
+            titleLabel.heightAnchor.constraint(equalToConstant: labelHeight),
+            titleLabel.widthAnchor.constraint(equalToConstant: labelWidth)
             
         ])
     }

@@ -10,8 +10,8 @@ import UIKit
 
 class BrowseViewController: UIViewController, UISearchBarDelegate {
     
-    private let searchBarHeight:CGFloat = 50
-    private let collectionHeight:CGFloat = 350
+    private let searchBarHeight:CGFloat = 30
+    private let collectionHeight:CGFloat = 232
     private let movieRequest = Request()
     
     let collectionList:[TVCollection] = [
@@ -35,7 +35,7 @@ class BrowseViewController: UIViewController, UISearchBarDelegate {
     
     let backgroundView:UIView = {
         let view = UIView()
-        view.backgroundColor = .magenta
+        view.backgroundColor = .black
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

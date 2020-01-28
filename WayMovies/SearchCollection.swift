@@ -29,7 +29,7 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: CGRect(x:0, y:0, width:0, height:0), collectionViewLayout: layout)
         layout.scrollDirection = .vertical
-        collection.backgroundColor = UIColor.gray
+        collection.backgroundColor = .black
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.isScrollEnabled = true
         return collection
@@ -59,7 +59,7 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
     func registerCollectionCellsAndDelegates() {
         searchCollection.delegate = self
         searchCollection.dataSource = self
-        searchCollection.register(MovieShowCell.self, forCellWithReuseIdentifier: searchCellID)
+        searchCollection.register(TVCell.self, forCellWithReuseIdentifier: searchCellID)
     }
     
     func searchCollectionConstraints() {
@@ -77,7 +77,7 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: searchCellID, for: indexPath) as! MovieShowCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: searchCellID, for: indexPath) as! TVCell
         let item = searchItems[indexPath.row]
         cell.backgroundColor = .white
         cell.layer.cornerRadius = 5
@@ -86,7 +86,7 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             //Case Movie
             cell.typeLabel.text = "Movie"
             cell.titleLabel.text = item.title
-            cell.ratingLabel.text = "Average User Rating: \(String(item.vote_average!))"
+            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
             
         } else if(item.known_for_department != nil) {
             //Case Actor
@@ -97,13 +97,13 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             //Case Show
             cell.typeLabel.text = "Show"
             cell.titleLabel.text = item.name
-            cell.ratingLabel.text = "Average User Rating: \(String(item.vote_average!))"
+            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
             
         }
         
         guard let path = item.poster_path else {
-            let def = UIImage(named: "default")
-            cell.imageView.image = def
+//            let def = UIImage(named: "default")
+//            cell.imageView.image = def
             return cell
         }
                 
@@ -114,7 +114,8 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
                 case .success(let data):
                     DispatchQueue.main.async {
                         cell.imageView.image = UIImage(data: data)
-                    }
+                        cell.titleLabel.text = ""
+                }
             }
         }
         

@@ -16,16 +16,16 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     private let movieRequest = Request()
     private let type:CollectionType
     private let labelHeight:CGFloat = 30
-    private let collectionHeight:CGFloat = 210
+    private let collectionHeight:CGFloat = 202
     private let cellHeight:CGFloat = 200
-    private let cellWidth:CGFloat = 140
-    private let cellInsetSize:CGFloat = 3
+    private let cellWidth:CGFloat = 145
+    private let cellInsetSize:CGFloat = 1
     
     let TVCollection:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: CGRect(x:0, y:0, width:0, height:0), collectionViewLayout: layout)
         layout.scrollDirection = .horizontal
-        collection.backgroundColor = .magenta
+        collection.backgroundColor = .black
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.isScrollEnabled = true
         return collection
@@ -83,7 +83,7 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     func registerCollectionCellsAndDelegates() {
         TVCollection.delegate = self
         TVCollection.dataSource = self
-        TVCollection.register(MovieShowCell.self, forCellWithReuseIdentifier: TVCellID)
+        TVCollection.register(TVCell.self, forCellWithReuseIdentifier: TVCellID)
     }
     
     func TVCollectionLabelConstraints() {
@@ -109,15 +109,15 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = TVCollection.dequeueReusableCell(withReuseIdentifier: TVCellID, for: indexPath) as! MovieShowCell
+        let cell = TVCollection.dequeueReusableCell(withReuseIdentifier: TVCellID, for: indexPath) as! TVCell
         
         let item = TVList[indexPath.row]
         cell.backgroundColor = .white
         cell.titleLabel.text = item.title ?? "Untitled Movie Lol"
         
         guard let path = item.poster_path else {
-            let def = UIImage(named: "default")
-            cell.imageView.image = def
+//            let def = UIImage(named: "default")
+//            cell.imageView.image = def
             return cell
         }
                 
@@ -128,7 +128,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
                 case .success(let data):
                     DispatchQueue.main.async {
                         cell.imageView.image = UIImage(data: data)
+                        cell.titleLabel.text = ""
                     }
+
             }
                 
         }
