@@ -12,6 +12,7 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
 
     private let searchBarHeight:CGFloat = 30
     private let collectionHeight:CGFloat = 232
+
     private let movieRequest = Request()
     
     let scrollView:UIScrollView = {
@@ -127,8 +128,8 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
             if index == 0 {
                 NSLayoutConstraint.activate([
                     collection.topAnchor.constraint(equalTo: scrollView.topAnchor),
-                    collection.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
-                    collection.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+                    collection.leftAnchor.constraint(equalTo: view.leftAnchor),
+                    collection.rightAnchor.constraint(equalTo: view.rightAnchor),
                     collection.heightAnchor.constraint(equalToConstant: collectionHeight)
                 ])
             } else {
