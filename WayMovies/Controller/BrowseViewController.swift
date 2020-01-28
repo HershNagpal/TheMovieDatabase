@@ -14,6 +14,13 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
     private let collectionHeight:CGFloat = 232
     private let movieRequest = Request()
     
+    let scrollView:UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.isScrollEnabled = true
+        return scrollView
+    }()
+    
     let collectionList:[TVCollection] = [
         {
             let collection = TVCollection(type: CollectionType.UpcomingMovies)
@@ -59,6 +66,11 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
         createElementsAndConstraints()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        scrollView.contentSize = calculateHeight()
+    }
+    
     func setUpDelegates() {
         searchBar.delegate = self
         for collection in collectionList {
@@ -66,13 +78,29 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
         }
     }
     
+    func calculateHeight() -> CGSize {
+        let width = Int(view.frame.width)
+        let height = Int(collectionHeight)*collectionList.count + Int(searchBarHeight)
+        return CGSize(width: width, height: height)
+    }
+    
     func createElementsAndConstraints() {
         view.addSubview(backgroundView)
         view.addSubview(searchBar)
-        
+        view.addSubview(scrollView)
         backgroundViewConstraints()
         searchBarConstraints()
+        scrollViewConstraints()
         createCollectionsAndConstraints()
+    }
+    
+    func scrollViewConstraints() {
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            scrollView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
     }
     
     func backgroundViewConstraints() {
@@ -95,12 +123,12 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
     
     func createCollectionsAndConstraints() {
         for (index, collection) in collectionList.enumerated() {
-            view.addSubview(collection)
+            scrollView.addSubview(collection)
             if index == 0 {
                 NSLayoutConstraint.activate([
-                    collection.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
-                    collection.leftAnchor.constraint(equalTo: view.leftAnchor),
-                    collection.rightAnchor.constraint(equalTo: view.rightAnchor),
+                    collection.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                    collection.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+                    collection.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
                     collection.heightAnchor.constraint(equalToConstant: collectionHeight)
                 ])
             } else {
