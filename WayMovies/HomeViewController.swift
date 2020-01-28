@@ -6,9 +6,9 @@
 //  Copyright © 2020 Hersh Nagpal. All rights reserved.
 //
 
-import SwiftUI
+import UIKit
 
-struct ContentView: View {
+struct HomeView: View {
     var body: some View {
         Text("Hello, World!")
     }
@@ -16,6 +16,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        HomeView()
     }
 }
