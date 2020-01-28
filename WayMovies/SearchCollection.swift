@@ -12,6 +12,8 @@ import UIKit
 
 
 class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    
     private var searchItems = [TVItem]() {
         didSet {
             DispatchQueue.main.async {
@@ -19,6 +21,9 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             }
         }
     }
+    
+    var navDelegate:NavigationDelegate?
+    
     let searchCellID:String = "CellID"
     let movieRequest = Request()
     let cellHeight:CGFloat = 300
@@ -131,13 +136,13 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let detailVC = DetailViewController()
-//        navigationController.push()
+        let item:TVItem = searchItems[indexPath.row]
+        navDelegate?.cellTapped(item)
     }
     
     func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
         movieRequest.getImage(searchTerms: searchTerms) { result in
-        completion(result)
+            completion(result)
         }
     }
     

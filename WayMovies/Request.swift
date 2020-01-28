@@ -82,7 +82,7 @@ struct Request {
     }
     
     func searchMulti(searchTerms: String, completion: @escaping(Result<[TVItem], Error>) -> Void) {
-        let searchURL = URL(string: "https://api.themoviedb.org/3/search/multi?api_key=\(API_KEY)&query=\(searchTerms)")!
+        let searchURL = URL(string: "https://api.themoviedb.org/3/search/multi?api_key=\(API_KEY)&query=\(replaceSpaces(string: searchTerms))")!
         
         let task = URLSession.shared.dataTask(with: searchURL) { (data, response, error) in
             guard let jsonData = data else {
@@ -118,5 +118,8 @@ struct Request {
         task.resume()
     }
     
+    func replaceSpaces(string:String) -> String {
+        return string.replacingOccurrences(of: " ", with: "%20")
+    }
     
 }

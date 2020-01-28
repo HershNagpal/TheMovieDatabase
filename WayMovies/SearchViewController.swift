@@ -9,7 +9,8 @@
 import Foundation
 import UIKit
 
-class SearchViewController: UIViewController, UISearchBarDelegate {
+class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDelegate {
+    
     let searchBarHeight:CGFloat = 30
     
     private var searchCollection:SearchCollection = {
@@ -42,7 +43,12 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     
     override func viewDidLoad() {
         createElementsAndConstraints()
+        setUpDelegates()
+    }
+    
+    func setUpDelegates() {
         searchBar.delegate = self
+        searchCollection.navDelegate = self
     }
     
     func createElementsAndConstraints() {
@@ -84,5 +90,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     
     func applySearch(searchItems: [TVItem]) {
         self.searchItems = searchItems
+    }
+    
+    func cellTapped(_ item: TVItem) {
+        navigationController?.pushViewController(DetailViewController(item: item), animated: true)
     }
 }

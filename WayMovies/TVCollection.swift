@@ -21,6 +21,8 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     private let cellWidth:CGFloat = 145
     private let cellInsetSize:CGFloat = 1
     
+    var navDelegate:NavigationDelegate?
+    
     let TVCollection:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: CGRect(x:0, y:0, width:0, height:0), collectionViewLayout: layout)
@@ -138,8 +140,8 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let detailVC = DetailViewController()
-//        navigationController?.pushViewController(detailVC, animated: true)
+        let item:TVItem = TVList[indexPath.row]
+        navDelegate?.cellTapped(item)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

@@ -8,8 +8,8 @@
 
 import UIKit
 
-class BrowseViewController: UIViewController, UISearchBarDelegate {
-    
+class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDelegate {
+
     private let searchBarHeight:CGFloat = 30
     private let collectionHeight:CGFloat = 232
     private let movieRequest = Request()
@@ -61,6 +61,9 @@ class BrowseViewController: UIViewController, UISearchBarDelegate {
     
     func setUpDelegates() {
         searchBar.delegate = self
+        for collection in collectionList {
+            collection.navDelegate = self
+        }
     }
     
     func createElementsAndConstraints() {
@@ -124,6 +127,10 @@ class BrowseViewController: UIViewController, UISearchBarDelegate {
                  }
              }
          }
+    }
+    
+    func cellTapped(_ item: TVItem) {
+        navigationController?.pushViewController(DetailViewController(item: item), animated: true)
     }
     
 }
