@@ -7,3 +7,7 @@
 //
 
 import Foundation
+
+enum CollectionType {
+    case TopRatedMovies, UpcomingMovies, TrendingMovies
+}

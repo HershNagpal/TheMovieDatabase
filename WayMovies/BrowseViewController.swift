@@ -8,17 +8,30 @@
 
 import UIKit
 
-class BrowseViewController: UIViewController {
+class BrowseViewController: UIViewController, UISearchBarDelegate {
     
-    let searchBarHeight:CGFloat = 50
-    let collectionHeight:CGFloat = 350
+    private let searchBarHeight:CGFloat = 50
+    private let collectionHeight:CGFloat = 350
+    private let movieRequest = Request()
     
-    let movieRequest = Request()
-    var topRatedMoviesCollection:TVCollection = {
-        let collection = TVCollection(labelText: "Top Rated Movies")
-        collection.translatesAutoresizingMaskIntoConstraints = false
-        return collection
-        }()
+    let collectionList:[TVCollection] = [
+        {
+            let collection = TVCollection(type: CollectionType.UpcomingMovies)
+            collection.translatesAutoresizingMaskIntoConstraints = false
+            return collection
+        }(),
+        {
+            let collection = TVCollection(type: CollectionType.TrendingMovies)
+            collection.translatesAutoresizingMaskIntoConstraints = false
+            return collection
+        }(),
+        {
+            let collection = TVCollection(type: CollectionType.TopRatedMovies)
+            collection.translatesAutoresizingMaskIntoConstraints = false
+            return collection
+        }(),
+        
+    ]
     
     let backgroundView:UIView = {
         let view = UIView()
@@ -42,18 +55,21 @@ class BrowseViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setUpDelegates()
         createElementsAndConstraints()
-        topRatedMoviesCollection.getTopRatedMovies()
+    }
+    
+    func setUpDelegates() {
+        searchBar.delegate = self
     }
     
     func createElementsAndConstraints() {
         view.addSubview(backgroundView)
         view.addSubview(searchBar)
-        view.addSubview(topRatedMoviesCollection)
         
         backgroundViewConstraints()
         searchBarConstraints()
-        topRatedMoviesCollectionConstraints()
+        createCollectionsAndConstraints()
     }
     
     func backgroundViewConstraints() {
@@ -74,12 +90,40 @@ class BrowseViewController: UIViewController {
         ])
     }
     
-    func topRatedMoviesCollectionConstraints() {
-        NSLayoutConstraint.activate([
-            topRatedMoviesCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
-            topRatedMoviesCollection.leftAnchor.constraint(equalTo: view.leftAnchor),
-            topRatedMoviesCollection.rightAnchor.constraint(equalTo: view.rightAnchor),
-            topRatedMoviesCollection.heightAnchor.constraint(equalToConstant: collectionHeight)
-        ])
+    func createCollectionsAndConstraints() {
+        for (index, collection) in collectionList.enumerated() {
+            view.addSubview(collection)
+            if index == 0 {
+                NSLayoutConstraint.activate([
+                    collection.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+                    collection.leftAnchor.constraint(equalTo: view.leftAnchor),
+                    collection.rightAnchor.constraint(equalTo: view.rightAnchor),
+                    collection.heightAnchor.constraint(equalToConstant: collectionHeight)
+                ])
+            } else {
+                NSLayoutConstraint.activate([
+                    collection.topAnchor.constraint(equalTo: collectionList[index-1].bottomAnchor),
+                    collection.leftAnchor.constraint(equalTo: view.leftAnchor),
+                    collection.rightAnchor.constraint(equalTo: view.rightAnchor),
+                    collection.heightAnchor.constraint(equalToConstant: collectionHeight)
+                ])
+            }
+        }
     }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        movieRequest.searchMulti(searchTerms: searchBar.text!) { [weak self] result in
+        switch result {
+             case .failure(let error):
+                 print(error)
+             case .success(let items):
+                 DispatchQueue.main.async {
+                    let vc = SearchViewController()
+                    vc.applySearch(searchItems: items)
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                 }
+             }
+         }
+    }
+    
 }

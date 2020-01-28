@@ -40,6 +40,11 @@ class SearchViewControllerOld: UIViewController, UISearchBarDelegate, UICollecti
         return button
     }()
     
+    init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?, searchItems:[TVItem] ) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.searchItems = searchItems
+    }
+    
     override func loadView() {
         super.loadView()
     }
@@ -173,6 +178,10 @@ class SearchViewControllerOld: UIViewController, UISearchBarDelegate, UICollecti
         movieRequest.getImage(searchTerms: searchTerms) { [weak self] result in
         completion(result)
         }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
 }

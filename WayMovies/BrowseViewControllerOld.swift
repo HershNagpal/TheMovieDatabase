@@ -1,5 +1,5 @@
 //
-//  BrowseViewController.swift
+//  BrowseViewControllerOld.swift
 //  WayMovies
 //
 //  Created by Hersh Nagpal on 1/21/20.

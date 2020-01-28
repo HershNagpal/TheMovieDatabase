@@ -7,3 +7,7 @@
 //
 
 import Foundation
+
+enum ItemType {
+    case Person, Show, Movie
+}

@@ -1,5 +1,5 @@
 //
-//  TopRatedMoviesCollection.swift
+//  TVCollection.swift
 //  WayMovies
 //
 //  Created by Hersh Nagpal on 1/24/20.
@@ -9,19 +9,19 @@
 import Foundation
 import UIKit
 
-class TopRatedMoviesCollection: UICollectionViewFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
-    var topRatedMovies = [TVItem]()
-    let topRatedMovieCellID:String = "CellID"
-    let movieRequest = Request()
+class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    private var TVList = [TVItem]()
+    private let TVCellID:String = "CellID"
     
-    let labelHeight:CGFloat = 30
-    let collectionHeight:CGFloat = 210
-    let cellHeight:CGFloat = 200
-    let cellWidth:CGFloat = 140
-    let searchBarHeight:CGFloat = 50
-    let cellInsetSize:CGFloat = 3
+    private let movieRequest = Request()
+    private let type:CollectionType
+    private let labelHeight:CGFloat = 30
+    private let collectionHeight:CGFloat = 210
+    private let cellHeight:CGFloat = 200
+    private let cellWidth:CGFloat = 140
+    private let cellInsetSize:CGFloat = 3
     
-    let topRatedMoviesCollection:UICollectionView = {
+    let TVCollection:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: CGRect(x:0, y:0, width:0, height:0), collectionViewLayout: layout)
         layout.scrollDirection = .horizontal
@@ -31,37 +31,113 @@ class TopRatedMoviesCollection: UICollectionViewFlowLayout, UICollectionViewDele
         return collection
     }()
     
-    let topRatedMoviesLabel:UILabel = {
+    let TVCollectionLabel:UILabel = {
         let label = UILabel()
-        label.text = "Top Rated Movies"
+        label.text = ""
         label.textColor = .white
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    override init() {
-        super.init()
+    override init(frame: CGRect) {
+        self.type = CollectionType.TopRatedMovies
+        super.init(frame: frame)
         registerCollectionCellsAndDelegates()
+        createElementsAndConstraints()
+        self.setTypeMethods()
+    }
+    
+    init(type: CollectionType) {
+        self.type = type
+        super.init(frame: CGRect(x:0, y:0, width:0, height:0))
+        registerCollectionCellsAndDelegates()
+        createElementsAndConstraints()
+        self.setTypeMethods()
+    }
+    
+    func setTypeMethods() {
+        switch self.type {
+        case CollectionType.TopRatedMovies:
+            self.TVCollectionLabel.text = "Top Rated Movies"
+            self.getTopRatedMovies()
+        case CollectionType.TrendingMovies:
+            self.TVCollectionLabel.text = "Popular Movies"
+            self.getPopularMovies()
+        case CollectionType.UpcomingMovies:
+            self.TVCollectionLabel.text = "Upcoming Movies"
+            self.getUpcomingMovies()
+        default:
+            self.TVCollectionLabel.text = "Top Rated Movies"
+            self.getTopRatedMovies()
+        }
+    }
+    
+    func createElementsAndConstraints() {
+        addSubview(TVCollectionLabel)
+        addSubview(TVCollection)
+        TVCollectionLabelConstraints()
+        TVCollectionConstraints()
     }
     
     func registerCollectionCellsAndDelegates() {
-        topRatedMoviesCollection.delegate = self
-        topRatedMoviesCollection.dataSource = self
-        topRatedMoviesCollection.register(MovieShowCell.self, forCellWithReuseIdentifier: topRatedMovieCellID)
+        TVCollection.delegate = self
+        TVCollection.dataSource = self
+        TVCollection.register(MovieShowCell.self, forCellWithReuseIdentifier: TVCellID)
+    }
+    
+    func TVCollectionLabelConstraints() {
+        NSLayoutConstraint.activate([
+            TVCollectionLabel.topAnchor.constraint(equalTo: self.topAnchor),
+            TVCollectionLabel.leftAnchor.constraint(equalTo: self.leftAnchor),
+            TVCollectionLabel.rightAnchor.constraint(equalTo: self.rightAnchor),
+            TVCollectionLabel.heightAnchor.constraint(equalToConstant: labelHeight)
+        ])
+    }
+    
+    func TVCollectionConstraints() {
+        NSLayoutConstraint.activate([
+            TVCollection.topAnchor.constraint(equalTo: TVCollectionLabel.bottomAnchor),
+            TVCollection.leftAnchor.constraint(equalTo: self.leftAnchor),
+            TVCollection.rightAnchor.constraint(equalTo: self.rightAnchor),
+            TVCollection.heightAnchor.constraint(equalToConstant: collectionHeight)
+        ])
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return topRatedMovies.count
+        return TVList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        <#code#>
+        let cell = TVCollection.dequeueReusableCell(withReuseIdentifier: TVCellID, for: indexPath) as! MovieShowCell
+        
+        let item = TVList[indexPath.row]
+        cell.backgroundColor = .white
+        cell.titleLabel.text = item.title ?? "Untitled Movie Lol"
+        
+        guard let path = item.poster_path else {
+            let def = UIImage(named: "default")
+            cell.imageView.image = def
+            return cell
+        }
+                
+        getImage(searchTerms: path) { (result) in
+            switch result {
+                case .failure(let error):
+                   print(error)
+                case .success(let data):
+                    DispatchQueue.main.async {
+                        cell.imageView.image = UIImage(data: data)
+                    }
+            }
+                
+        }
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let detailVC = DetailViewController()
-        navigationController?.pushViewController(detailVC, animated: true)
+//        let detailVC = DetailViewController()
+//        navigationController?.pushViewController(detailVC, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -78,12 +154,45 @@ class TopRatedMoviesCollection: UICollectionViewFlowLayout, UICollectionViewDele
             case .failure(let error):
                 print(error)
             case .success(let items):
-                self?.topRatedMovies = items
+                self?.TVList = items
                 DispatchQueue.main.async {
-                    self?.topRatedMoviesCollection.reloadData()
+                    self?.TVCollection.reloadData()
                 }
             }
-            
+        }
+    }
+    
+    func getPopularMovies() {
+        movieRequest.getPopularMovies { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let items):
+                self?.TVList = items
+                DispatchQueue.main.async {
+                    self?.TVCollection.reloadData()
+                }
+            }
+        }
+    }
+    
+    func getUpcomingMovies() {
+        movieRequest.getUpcomingMovies { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let items):
+                self?.TVList = items
+                DispatchQueue.main.async {
+                    self?.TVCollection.reloadData()
+                }
+            }
+        }
+    }
+    
+    func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
+        movieRequest.getImage(searchTerms: searchTerms) { result in
+        completion(result)
         }
     }
     
@@ -91,10 +200,5 @@ class TopRatedMoviesCollection: UICollectionViewFlowLayout, UICollectionViewDele
         fatalError("init(coder:) has not been implemented")
     }
     
-    func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
-        movieRequest.getImage(searchTerms: searchTerms) { [weak self] result in
-        completion(result)
-        }
-    }
     
 }
