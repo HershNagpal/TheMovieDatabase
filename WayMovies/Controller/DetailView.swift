@@ -39,7 +39,7 @@ class DetailView: UIView {
         label.textAlignment = .left
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "My Sweet Boi"
+//        label.text = "My Sweet Boi"
         return label
     }()
     
@@ -48,7 +48,7 @@ class DetailView: UIView {
         label.textAlignment = .left
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "TVShow"
+//        label.text = "TVShow"
         return label
     }()
     
@@ -57,7 +57,7 @@ class DetailView: UIView {
         label.textAlignment = .left
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "5/5"
+//        label.text = "5/5"
         return label
     }()
     
@@ -155,6 +155,14 @@ class DetailView: UIView {
 
     
     func typeLabelConstraints() {
+        NSLayoutConstraint.activate([
+            typeLabel.bottomAnchor.constraint(equalTo: titleLabel.topAnchor),
+            typeLabel.leftAnchor.constraint(equalTo: self.leftAnchor),
+            typeLabel.heightAnchor.constraint(equalToConstant: labelHeight)
+        ])
+    }
+    
+    func ratingLabelConstraints() {
         NSLayoutConstraint.activate([
             typeLabel.bottomAnchor.constraint(equalTo: titleLabel.topAnchor),
             typeLabel.leftAnchor.constraint(equalTo: self.leftAnchor),
