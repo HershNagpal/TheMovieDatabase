@@ -77,8 +77,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let movieRequest = Request()
-        movieRequest.searchMulti(searchTerms: searchBar.text!) { [weak self] result in
+        Request.searchMulti(searchTerms: searchBar.text!) { [weak self] result in
         switch result {
              case .failure(let error):
                  print(error)
@@ -90,6 +89,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
     
     func applySearch(searchItems: [TVItem]) {
         self.searchItems = searchItems
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     func cellTapped(_ item: TVItem) {

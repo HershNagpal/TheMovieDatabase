@@ -99,8 +99,7 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let movieRequest = Request()
-        movieRequest.searchMulti(searchTerms: searchBar.text!) { [weak self] result in
+        Request.searchMulti(searchTerms: searchBar.text!) { [weak self] result in
         switch result {
              case .failure(let error):
                  print(error)
@@ -112,6 +111,10 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
                  }
              }
          }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     @objc func browseButtonClicked() {

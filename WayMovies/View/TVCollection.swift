@@ -12,8 +12,7 @@ import UIKit
 class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     private var TVList = [TVItem]()
     private let TVCellID:String = "CellID"
-    
-    private let movieRequest = Request()
+
     private let type:CollectionType
     private let labelHeight:CGFloat = 30
     private let collectionHeight:CGFloat = 202
@@ -63,15 +62,21 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         case CollectionType.TopRatedMovies:
             self.TVCollectionLabel.text = "Top Rated Movies"
             self.getTopRatedMovies()
-        case CollectionType.TrendingMovies:
+        case CollectionType.PopularMovies:
             self.TVCollectionLabel.text = "Popular Movies"
             self.getPopularMovies()
         case CollectionType.UpcomingMovies:
             self.TVCollectionLabel.text = "Upcoming Movies"
             self.getUpcomingMovies()
-        default:
-            self.TVCollectionLabel.text = "Top Rated Movies"
-            self.getTopRatedMovies()
+        case CollectionType.TopRatedShows:
+            self.TVCollectionLabel.text = "Top Rated TV Shows"
+            self.getTopRatedShows()
+        case CollectionType.PopularShows:
+            self.TVCollectionLabel.text = "Popular TV Shows"
+            self.getPopularShows()
+        case CollectionType.PopularPeople:
+            self.TVCollectionLabel.text = "Popular People"
+            self.getPopularPeople()
         }
     }
     
@@ -115,26 +120,35 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         
         let item = TVList[indexPath.row]
         cell.backgroundColor = .white
-        cell.titleLabel.text = item.title ?? "Untitled Movie Lol"
+        cell.titleLabel.text = item.title ?? item.name ?? "Untitled Movie Lol"
         
-        guard let path = item.poster_path else {
-//            let def = UIImage(named: "default")
-//            cell.imageView.image = def
-            return cell
-        }
                 
-        getImage(searchTerms: path) { (result) in
-            switch result {
-                case .failure(let error):
-                   print(error)
-                case .success(let data):
-                    DispatchQueue.main.async {
-                        cell.imageView.image = UIImage(data: data)
-                        cell.titleLabel.text = ""
+        if item.poster_path != "" && item.poster_path != nil {
+            getImage(searchTerms: item.poster_path!) { (result) in
+                switch result {
+                    case .failure(let error):
+                       print(error)
+                    case .success(let data):
+                        DispatchQueue.main.async {
+                            cell.imageView.image = UIImage(data: data)
+                            cell.titleLabel.text = ""
                     }
-
+                }
             }
-                
+        } else if item.profile_path != "" && item.profile_path != nil {
+            getImage(searchTerms: item.profile_path!) { (result) in
+                switch result {
+                    case .failure(let error):
+                       print(error)
+                    case .success(let data):
+                        DispatchQueue.main.async {
+                            cell.imageView.image = UIImage(data: data)
+//                            cell.titleLabel.text = ""
+                    }
+                }
+            }
+        } else {
+            return cell
         }
         return cell
     }
@@ -153,7 +167,7 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func getTopRatedMovies() {
-        movieRequest.getTopRatedMovies { [weak self] result in
+        Request.getTopRatedMovies { [weak self] result in
             switch result {
             case .failure(let error):
                 print(error)
@@ -167,7 +181,49 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func getPopularMovies() {
-        movieRequest.getPopularMovies { [weak self] result in
+        Request.getPopularMovies { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let items):
+                self?.TVList = items
+                DispatchQueue.main.async {
+                    self?.TVCollection.reloadData()
+                }
+            }
+        }
+    }
+    
+    func getPopularShows() {
+        Request.getPopularShows { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let items):
+                self?.TVList = items
+                DispatchQueue.main.async {
+                    self?.TVCollection.reloadData()
+                }
+            }
+        }
+    }
+    
+    func getPopularPeople() {
+        Request.getPopularPeople { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let items):
+                self?.TVList = items
+                DispatchQueue.main.async {
+                    self?.TVCollection.reloadData()
+                }
+            }
+        }
+    }
+    
+    func getTopRatedShows() {
+        Request.getTopRatedShows { [weak self] result in
             switch result {
             case .failure(let error):
                 print(error)
@@ -181,7 +237,7 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func getUpcomingMovies() {
-        movieRequest.getUpcomingMovies { [weak self] result in
+        Request.getUpcomingMovies { [weak self] result in
             switch result {
             case .failure(let error):
                 print(error)
@@ -195,7 +251,7 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
-        movieRequest.getImage(searchTerms: searchTerms) { result in
+        Request.getImage(searchTerms: searchTerms) { result in
         completion(result)
         }
     }

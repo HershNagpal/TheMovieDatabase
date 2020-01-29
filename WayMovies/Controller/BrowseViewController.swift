@@ -12,8 +12,6 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
 
     private let searchBarHeight:CGFloat = 30
     private let collectionHeight:CGFloat = 232
-
-    private let movieRequest = Request()
     
     let scrollView:UIScrollView = {
         let scrollView = UIScrollView()
@@ -29,12 +27,27 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
             return collection
         }(),
         {
-            let collection = TVCollection(type: CollectionType.TrendingMovies)
+            let collection = TVCollection(type: CollectionType.PopularMovies)
             collection.translatesAutoresizingMaskIntoConstraints = false
             return collection
         }(),
         {
             let collection = TVCollection(type: CollectionType.TopRatedMovies)
+            collection.translatesAutoresizingMaskIntoConstraints = false
+            return collection
+        }(),
+        {
+            let collection = TVCollection(type: CollectionType.TopRatedShows)
+            collection.translatesAutoresizingMaskIntoConstraints = false
+            return collection
+        }(),
+        {
+            let collection = TVCollection(type: CollectionType.PopularShows)
+            collection.translatesAutoresizingMaskIntoConstraints = false
+            return collection
+        }(),
+        {
+            let collection = TVCollection(type: CollectionType.PopularPeople)
             collection.translatesAutoresizingMaskIntoConstraints = false
             return collection
         }(),
@@ -56,9 +69,27 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
         return searchBar
     }()
     
+    let favoriteButton:UIBarButtonItem = {
+        let button = UIBarButtonItem()
+        button.style = .plain
+        return button
+    }()
+    
+    func setUpNavBar() {
+        self.navigationController!.navigationBar.barStyle = .black
+        self.navigationController!.navigationBar.isTranslucent = true
+        self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        self.navigationController!.navigationBar.tintColor = #colorLiteral(red: 1, green: 0.99997437, blue: 0.9999912977, alpha: 1)
+        self.navigationItem.rightBarButtonItem = favoriteButton
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+    }
     
     override func loadView() {
         super.loadView()
+        setUpNavBar()
+        navigationController?.setNavigationBarHidden(false, animated: false )
     }
     
     override func viewDidLoad() {
@@ -144,7 +175,7 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        movieRequest.searchMulti(searchTerms: searchBar.text!) { [weak self] result in
+        Request.searchMulti(searchTerms: searchBar.text!) { [weak self] result in
         switch result {
              case .failure(let error):
                  print(error)
@@ -160,6 +191,10 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
     
     func cellTapped(_ item: TVItem) {
         navigationController?.pushViewController(DetailViewController(item: item), animated: true)
+    }
+    
+    func rightButtonAction(sender: UIBarButtonItem) {
+        navigationController?.pushViewController(FavoritesViewController(), animated: true)
     }
     
 }

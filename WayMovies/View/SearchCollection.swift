@@ -9,8 +9,6 @@
 import Foundation
 import UIKit
 
-
-
 class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     
@@ -25,7 +23,6 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
     var navDelegate:NavigationDelegate?
     
     let searchCellID:String = "CellID"
-    let movieRequest = Request()
     let cellHeight:CGFloat = 300
     let cellWidth:CGFloat = 200
     let cellInsetSize:CGFloat = 1
@@ -105,23 +102,33 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
             
         }
-        
-        guard let path = item.poster_path else {
-//            let def = UIImage(named: "default")
-//            cell.imageView.image = def
-            return cell
-        }
                 
-        getImage(searchTerms: path) { (result) in
-            switch result {
-                case .failure(let error):
-                   print(error)
-                case .success(let data):
-                    DispatchQueue.main.async {
-                        cell.imageView.image = UIImage(data: data)
-                        cell.titleLabel.text = ""
+        if item.poster_path != "" && item.poster_path != nil {
+            getImage(searchTerms: item.poster_path!) { (result) in
+                switch result {
+                    case .failure(let error):
+                       print(error)
+                    case .success(let data):
+                        DispatchQueue.main.async {
+                            cell.imageView.image = UIImage(data: data)
+                            cell.titleLabel.text = ""
+                    }
                 }
             }
+        } else if item.profile_path != "" && item.profile_path != nil {
+            getImage(searchTerms: item.profile_path!) { (result) in
+                switch result {
+                    case .failure(let error):
+                       print(error)
+                    case .success(let data):
+                        DispatchQueue.main.async {
+                            cell.imageView.image = UIImage(data: data)
+//                            cell.titleLabel.text = ""
+                    }
+                }
+            }
+        } else {
+            return cell
         }
         
         return cell
@@ -141,7 +148,7 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
-        movieRequest.getImage(searchTerms: searchTerms) { result in
+            Request.getImage(searchTerms: searchTerms) { result in
             completion(result)
         }
     }

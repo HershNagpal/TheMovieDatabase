@@ -9,5 +9,5 @@
 import Foundation
 
 enum CollectionType {
-    case TopRatedMovies, UpcomingMovies, TrendingMovies
+    case TopRatedMovies, UpcomingMovies, PopularMovies, PopularShows, TopRatedShows, PopularPeople
 }

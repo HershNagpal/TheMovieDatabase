@@ -14,8 +14,6 @@ class DetailView: UIView {
     private let imageHeight:CGFloat = 500
     private let labelHeight:CGFloat = 40
     
-    private let movieRequest = Request()
-    
     let imageView:UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +60,7 @@ class DetailView: UIView {
     }()
     
     func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
-        movieRequest.getImage(searchTerms: searchTerms) { result in
+        Request.getImage(searchTerms: searchTerms) { result in
             completion(result)
         }
     }
@@ -87,20 +85,27 @@ class DetailView: UIView {
             
         }
         
-        guard let path = item.poster_path else {
-            let def = UIImage(named: "default")
-            self.imageView.image = def
-            return
-        }
-        
-        getImage(searchTerms: path) { (result) in
-            switch result {
-                case .failure(let error):
-                   print(error)
-                case .success(let data):
-                    DispatchQueue.main.async {
-                        self.imageView.image = UIImage(data: data)
+        if item.poster_path != "" && item.poster_path != nil {
+            getImage(searchTerms: item.poster_path!) { (result) in
+                switch result {
+                    case .failure(let error):
+                       print(error)
+                    case .success(let data):
+                        DispatchQueue.main.async {
+                            self.imageView.image = UIImage(data: data)
                     }
+                }
+            }
+        } else if item.profile_path != "" && item.profile_path != nil {
+            getImage(searchTerms: item.profile_path!) { (result) in
+                switch result {
+                    case .failure(let error):
+                       print(error)
+                    case .success(let data):
+                        DispatchQueue.main.async {
+                            self.imageView.image = UIImage(data: data)
+                    }
+                }
             }
         }
     }
