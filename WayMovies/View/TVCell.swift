@@ -11,6 +11,7 @@ import UIKit
 
 class TVCell: UICollectionViewCell {
     
+    private let item:TVItem
     private let labelHeight:CGFloat = 50
     private let labelWidth:CGFloat = 175
     private let favoriteButtonHeight:CGFloat = 25
@@ -55,12 +56,13 @@ class TVCell: UICollectionViewCell {
         return label
     }()
     
-    var favoriteButton: UIButton = {
+    lazy var favoriteButton: UIButton = {
         let button = UIButton()
+        button.backgroundColor = .magenta
+        button.addTarget(self, action: #selector(favoriteButtonClicked), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(favoriteButtonClicked), for: .touchDown)
-        button.setImage(UIImage(named: "love.png"), for: .selected)
-        button.setImage(UIImage(named: "unlove.png"), for: .normal)
+//        button.setImage(UIImage(named: "love.png"), for: .selected)
+//        button.setImage(UIImage(named: "unlove.png"), for: .normal)
         return button
     }()
     
@@ -127,8 +129,8 @@ class TVCell: UICollectionViewCell {
     }
     
     @objc func favoriteButtonClicked() {
-//        FavoritesCollection.addToFavorites(item: )
-        print("Yee yee")
+        FavoritesCollection.addToFavorites(item: )
+//        print("Yee yee")
         favoriteButton.isSelected = !favoriteButton.isSelected
     }
 }
