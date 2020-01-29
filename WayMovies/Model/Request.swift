@@ -173,6 +173,75 @@ struct Request {
         task.resume()
     }
     
+    static func searchMovie(searchTerms: String, completion: @escaping(Result<[TVItem], Error>) -> Void) {
+        let searchURL = URL(string: "https://api.themoviedb.org/3/search/movie?api_key=\(API_KEY)&language=en-US&query=\(replaceSpaces(string: searchTerms))&page=1")!
+        
+        let task = URLSession.shared.dataTask(with: searchURL) { (data, response, error) in
+            guard let jsonData = data else {
+                completion(.failure(error!))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let searchResponse = try decoder.decode(Response.self, from: jsonData)
+                let tvItems = searchResponse.results
+                completion(.success(tvItems))
+                
+            } catch {
+                completion(.failure(error))
+            }
+            
+        }
+        task.resume()
+    }
+    
+    static func searchPeople(searchTerms: String, completion: @escaping(Result<[TVItem], Error>) -> Void) {
+        let searchURL = URL(string: "https://api.themoviedb.org/3/search/person?api_key=\(API_KEY)&language=en-US&query=\(replaceSpaces(string: searchTerms))&page=1")!
+        
+        let task = URLSession.shared.dataTask(with: searchURL) { (data, response, error) in
+            guard let jsonData = data else {
+                completion(.failure(error!))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let searchResponse = try decoder.decode(Response.self, from: jsonData)
+                let tvItems = searchResponse.results
+                completion(.success(tvItems))
+                
+            } catch {
+                completion(.failure(error))
+            }
+            
+        }
+        task.resume()
+    }
+    
+    static func searchShows(searchTerms: String, completion: @escaping(Result<[TVItem], Error>) -> Void) {
+        let searchURL = URL(string: "https://api.themoviedb.org/3/search/tv?api_key=\(API_KEY)&language=en-US&query=\(replaceSpaces(string: searchTerms))&page=1")!
+        
+        let task = URLSession.shared.dataTask(with: searchURL) { (data, response, error) in
+            guard let jsonData = data else {
+                completion(.failure(error!))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let searchResponse = try decoder.decode(Response.self, from: jsonData)
+                let tvItems = searchResponse.results
+                completion(.success(tvItems))
+                
+            } catch {
+                completion(.failure(error))
+            }
+            
+        }
+        task.resume()
+    }
+    
     static func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
         
         let searchURL = URL(string: "https://image.tmdb.org/t/p/original\(searchTerms)")!

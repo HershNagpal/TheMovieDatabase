@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDelegate {
+class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDelegate, UITableViewDelegate, UITableViewDataSource {
     
     let searchBarHeight:CGFloat = 30
     
@@ -17,6 +17,12 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
         let collection = SearchCollection()
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
+    }()
+    
+    let suggestionTable:UITableView = {
+        let table = UITableView()
+        table.translatesAutoresizingMaskIntoConstraints = false
+        return table
     }()
     
     let searchBar:UISearchBar = {
@@ -63,6 +69,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
     func setUpDelegates() {
         searchBar.delegate = self
         searchCollection.navDelegate = self
+        suggestionTable.delegate = self
+        suggestionTable.dataSource = self
     }
     
     func createElementsAndConstraints() {
@@ -99,6 +107,18 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
                 self?.searchCollection.applySearch(searchItems: items)
              }
          }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        <#code#>
+    }
+    
+    func createSuggestionTable() {
+        
     }
     
     func applySearch(searchItems: [TVItem]) {
