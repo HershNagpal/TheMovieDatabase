@@ -11,7 +11,8 @@ import UIKit
 
 class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDelegate, UITableViewDelegate, UITableViewDataSource {
     
-    let searchBarHeight:CGFloat = 30
+    let searchBarHeight:CGFloat = 40
+//    let suggestionRowHeight:CGFloat = 30
     
     private var searchCollection:SearchCollection = {
         let collection = SearchCollection()
@@ -21,6 +22,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
     
     let suggestionTable:UITableView = {
         let table = UITableView()
+        table.rowHeight = 40
+        table.separatorStyle = .singleLine
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
     }()
@@ -28,6 +31,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
     let searchBar:UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.searchBarStyle = .prominent
+        searchBar.showsCancelButton = true
         searchBar.placeholder = "Search"
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         return searchBar
@@ -71,13 +75,17 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
         searchCollection.navDelegate = self
         suggestionTable.delegate = self
         suggestionTable.dataSource = self
+        suggestionTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
     func createElementsAndConstraints() {
         view.addSubview(searchBar)
         view.addSubview(searchCollection)
+        view.addSubview(suggestionTable)
+        suggestionTable.isHidden = true
         searchBarConstraints()
         searchCollectionConstraints()
+        suggestionTableConstraints()
     }
     
     func searchCollectionConstraints() {
@@ -98,6 +106,15 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
         ])
     }
     
+    func suggestionTableConstraints() {
+        NSLayoutConstraint.activate([
+            suggestionTable.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            suggestionTable.leftAnchor.constraint(equalTo: view.leftAnchor),
+            suggestionTable.rightAnchor.constraint(equalTo: view.rightAnchor),
+            suggestionTable.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         Request.searchMulti(searchTerms: searchBar.text!) { [weak self] result in
         switch result {
@@ -107,6 +124,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
                 self?.searchCollection.applySearch(searchItems: items)
              }
          }
+        searchBar.text = ""
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -114,15 +132,37 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
-    }
-    
-    func createSuggestionTable() {
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")! //1.
+        cell.backgroundColor = .white
+        switch indexPath.row {
+        case 0:
+            cell.textLabel?.text = "\(searchBar.text ?? "") in Movies"
+        case 1:
+            cell.textLabel?.text = "\(searchBar.text ?? "") in TV Shows"
+        case 2:
+            cell.textLabel?.text = "\(searchBar.text ?? "") in People"
+        default:
+            cell.textLabel?.text = "Enter Search Terms"
+        }
+        return cell
     }
     
     func applySearch(searchItems: [TVItem]) {
         self.searchItems = searchItems
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText != "" {
+            suggestionTable.reloadData()
+            suggestionTable.isHidden = false
+        } else {
+            suggestionTable.isHidden = true
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//        suggestionTable.removeFromSuperview()
+        suggestionTable.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {

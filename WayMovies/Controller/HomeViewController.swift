@@ -119,6 +119,5 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
     
     @objc func browseButtonClicked() {
         navigationController?.pushViewController(BrowseViewController(), animated: true)
-        print("yee yee")
     }
 }
