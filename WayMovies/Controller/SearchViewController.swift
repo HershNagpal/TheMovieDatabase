@@ -33,6 +33,14 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
         }
     }
     
+    func setUpNavBar() {
+        self.navigationController!.navigationBar.barStyle = .black
+        self.navigationController!.navigationBar.isTranslucent = true
+        self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        self.navigationController!.navigationBar.tintColor = #colorLiteral(red: 1, green: 0.99997437, blue: 0.9999912977, alpha: 1)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Favorites", style: .done, target: self, action: #selector(viewFavorites))
+    }
+    
     init() {
         super.init(nibName:nil, bundle:nil)
     }
@@ -41,7 +49,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func loadView() {
+        setUpNavBar()
+        super.loadView()
+    }
+    
     override func viewDidLoad() {
+        super.viewDidLoad()
         createElementsAndConstraints()
         setUpDelegates()
     }
@@ -97,5 +111,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
     
     func cellTapped(_ item: TVItem) {
         navigationController?.pushViewController(DetailViewController(item: item), animated: true)
+    }
+    
+    @objc
+    func viewFavorites(sender: UIBarButtonItem) {
+        navigationController?.pushViewController(FavoritesViewController(), animated: true)
     }
 }

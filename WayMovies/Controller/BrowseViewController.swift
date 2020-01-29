@@ -71,7 +71,7 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
     
     let favoriteButton:UIBarButtonItem = {
         let button = UIBarButtonItem()
-        button.style = .plain
+        button.title = "Favorites"
         return button
     }()
     
@@ -80,7 +80,7 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
         self.navigationController!.navigationBar.isTranslucent = true
         self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         self.navigationController!.navigationBar.tintColor = #colorLiteral(red: 1, green: 0.99997437, blue: 0.9999912977, alpha: 1)
-        self.navigationItem.rightBarButtonItem = favoriteButton
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Favorites", style: .done, target: self, action: #selector(viewFavorites))
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -193,7 +193,8 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
         navigationController?.pushViewController(DetailViewController(item: item), animated: true)
     }
     
-    func rightButtonAction(sender: UIBarButtonItem) {
+    @objc
+    func viewFavorites(sender: UIBarButtonItem) {
         navigationController?.pushViewController(FavoritesViewController(), animated: true)
     }
     

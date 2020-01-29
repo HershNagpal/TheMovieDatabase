@@ -1,5 +1,5 @@
 //
-//  MovieShowCell.swift
+//  TVCell.swift
 //  WayMovies
 //
 //  Created by Hersh Nagpal on 1/20/20.
@@ -8,10 +8,13 @@
 
 import UIKit
 
+
 class TVCell: UICollectionViewCell {
     
     private let labelHeight:CGFloat = 50
     private let labelWidth:CGFloat = 175
+    private let favoriteButtonHeight:CGFloat = 25
+    private let favoriteButtonWidth:CGFloat = 25
     
     let imageView: UIImageView = {
         let label = UIImageView()
@@ -52,16 +55,27 @@ class TVCell: UICollectionViewCell {
         return label
     }()
     
+    var favoriteButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(favoriteButtonClicked), for: .touchDown)
+        button.setImage(UIImage(named: "love.png"), for: .selected)
+        button.setImage(UIImage(named: "unlove.png"), for: .normal)
+        return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(imageView)
         addSubview(titleLabel)
         addSubview(ratingLabel)
         addSubview(typeLabel)
+        addSubview(favoriteButton)
         imageViewConstraints()
         titleLabelConstraints()
         ratingLabelConstraints()
         typeLabelConstraints()
+        favoriteButtonConstraints()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -95,11 +109,26 @@ class TVCell: UICollectionViewCell {
         ])
     }
     
+    func favoriteButtonConstraints() {
+        NSLayoutConstraint.activate([
+            favoriteButton.topAnchor.constraint(equalTo: self.topAnchor, constant:favoriteButtonHeight/2),
+            favoriteButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -favoriteButtonHeight/2),
+            favoriteButton.heightAnchor.constraint(equalToConstant: favoriteButtonHeight),
+            favoriteButton.widthAnchor.constraint(equalToConstant: favoriteButtonWidth)
+        ])
+    }
+    
     func ratingLabelConstraints() {
         NSLayoutConstraint.activate([
             ratingLabel.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor, constant: labelHeight/2),
             ratingLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             ratingLabel.heightAnchor.constraint(equalToConstant: labelHeight)
         ])
+    }
+    
+    @objc func favoriteButtonClicked() {
+//        FavoritesCollection.addToFavorites(item: )
+        print("Yee yee")
+        favoriteButton.isSelected = !favoriteButton.isSelected
     }
 }
