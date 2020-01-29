@@ -160,6 +160,52 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if searchBar.text == "" {
+            return
+            
+            
+        }
+        switch indexPath.row {
+        case 0:
+            Request.searchMovie(searchTerms: searchBar.text!) { [weak self] result in
+            switch result {
+                 case .failure(let error):
+                     print(error)
+                 case .success(let items):
+                    self?.searchCollection.applySearch(searchItems: items)
+                 }
+             }
+            searchBar.text = ""
+            suggestionTable.isHidden = true
+        case 1:
+            Request.searchShows(searchTerms: searchBar.text!) { [weak self] result in
+            switch result {
+                 case .failure(let error):
+                     print(error)
+                 case .success(let items):
+                    self?.searchCollection.applySearch(searchItems: items)
+                 }
+             }
+            searchBar.text = ""
+            suggestionTable.isHidden = true
+        case 2:
+            Request.searchPeople(searchTerms: searchBar.text!) { [weak self] result in
+            switch result {
+                 case .failure(let error):
+                     print(error)
+                 case .success(let items):
+                    self?.searchCollection.applySearch(searchItems: items)
+                 }
+             }
+            searchBar.text = ""
+            suggestionTable.isHidden = true
+        default:
+            searchBar.text = ""
+            suggestionTable.isHidden = true
+        }
+    }
+    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
 //        suggestionTable.removeFromSuperview()
         suggestionTable.isHidden = true

@@ -174,7 +174,7 @@ struct Request {
     }
     
     static func searchMovie(searchTerms: String, completion: @escaping(Result<[TVItem], Error>) -> Void) {
-        let searchURL = URL(string: "https://api.themoviedb.org/3/search/movie?api_key=\(API_KEY)&language=en-US&query=\(replaceSpaces(string: searchTerms))&page=1")!
+        let searchURL = URL(string: "https://api.themoviedb.org/3/search/movie?api_key=\(API_KEY)&query=\(replaceSpaces(string: searchTerms))")!
         
         let task = URLSession.shared.dataTask(with: searchURL) { (data, response, error) in
             guard let jsonData = data else {
@@ -197,7 +197,7 @@ struct Request {
     }
     
     static func searchPeople(searchTerms: String, completion: @escaping(Result<[TVItem], Error>) -> Void) {
-        let searchURL = URL(string: "https://api.themoviedb.org/3/search/person?api_key=\(API_KEY)&language=en-US&query=\(replaceSpaces(string: searchTerms))&page=1")!
+        let searchURL = URL(string: "https://api.themoviedb.org/3/search/person?api_key=\(API_KEY)&query=\(replaceSpaces(string: searchTerms))")!
         
         let task = URLSession.shared.dataTask(with: searchURL) { (data, response, error) in
             guard let jsonData = data else {
@@ -220,7 +220,7 @@ struct Request {
     }
     
     static func searchShows(searchTerms: String, completion: @escaping(Result<[TVItem], Error>) -> Void) {
-        let searchURL = URL(string: "https://api.themoviedb.org/3/search/tv?api_key=\(API_KEY)&language=en-US&query=\(replaceSpaces(string: searchTerms))&page=1")!
+        let searchURL = URL(string: "https://api.themoviedb.org/3/search/tv?api_key=\(API_KEY)&query=\(replaceSpaces(string: searchTerms))")!
         
         let task = URLSession.shared.dataTask(with: searchURL) { (data, response, error) in
             guard let jsonData = data else {

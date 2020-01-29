@@ -111,8 +111,8 @@ class TVCell: UICollectionViewCell {
     
     func favoriteButtonConstraints() {
         NSLayoutConstraint.activate([
-            favoriteButton.topAnchor.constraint(equalTo: self.topAnchor, constant:favoriteButtonHeight/2),
-            favoriteButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -favoriteButtonHeight/2),
+            favoriteButton.topAnchor.constraint(equalTo: imageView.topAnchor, constant:favoriteButtonHeight/2),
+            favoriteButton.rightAnchor.constraint(equalTo: imageView.rightAnchor, constant: -favoriteButtonHeight/2),
             favoriteButton.heightAnchor.constraint(equalToConstant: favoriteButtonHeight),
             favoriteButton.widthAnchor.constraint(equalToConstant: favoriteButtonWidth)
         ])
