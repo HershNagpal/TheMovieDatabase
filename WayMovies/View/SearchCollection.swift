@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class SearchCollection: UIView, UICollectionViewDelegateFlowLayout {
     
     
     private var searchItems = [TVItem]() {
@@ -51,8 +51,6 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         createElementsAndConstraints()
     }
     
-
-    
     func createElementsAndConstraints() {
         addSubview(searchCollection)
         searchCollectionConstraints()
@@ -73,67 +71,32 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         ])
     }
     
+    func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
+            Request.getImage(searchTerms: searchTerms) { result in
+            completion(result)
+        }
+    }
+    
+    
+    func applySearch(searchItems:[TVItem]) {
+        self.searchItems = searchItems
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension SearchCollection: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return searchItems.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: searchCellID, for: indexPath) as! TVCell
         let item = searchItems[indexPath.row]
-        cell.backgroundColor = .white
-        cell.layer.cornerRadius = 5
-        cell.setItem(item: item)
-        
-        if(item.title != nil) {
-            //Case Movie
-            cell.typeLabel.text = "Movie"
-            cell.titleLabel.text = item.title
-            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
-            cell.imageView.image = UIImage(named: "movie_default.jpg")
-            
-        } else if(item.known_for_department != nil) {
-            //Case Actor
-            cell.typeLabel.text = "Person"
-            cell.titleLabel.text = item.name
-            cell.imageView.image = UIImage(named: "profile_default.jpg")
-        } else {
-            //Case Show
-            cell.typeLabel.text = "Show"
-            cell.titleLabel.text = item.name
-            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
-            cell.imageView.image = UIImage(named: "movie_default.jpg")
-            
-        }
-                
-        if item.poster_path != "" && item.poster_path != nil {
-            getImage(searchTerms: item.poster_path!) { (result) in
-                switch result {
-                    case .failure(let error):
-                       print(error)
-                    case .success(let data):
-                        DispatchQueue.main.async {
-                            cell.imageView.image = UIImage(data: data)
-                            cell.titleLabel.text = ""
-                    }
-                }
-            }
-        } else if item.profile_path != "" && item.profile_path != nil {
-            getImage(searchTerms: item.profile_path!) { (result) in
-                switch result {
-                    case .failure(let error):
-                       print(error)
-                    case .success(let data):
-                        DispatchQueue.main.async {
-                            cell.imageView.image = UIImage(data: data)
-//                            cell.titleLabel.text = ""
-                    }
-                }
-            }
-        } else {
-            return cell
-        }
-        
+        setCellDefaults(cell: cell, item: item)
+        getCellImage(cell: cell, item: item)
         return cell
     }
     
@@ -150,18 +113,56 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         navDelegate?.cellTapped(item)
     }
     
-    func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
-            Request.getImage(searchTerms: searchTerms) { result in
-            completion(result)
+    func setCellDefaults(cell: TVCell, item: TVItem) {
+        cell.setItem(item: item)
+        cell.backgroundColor = .white
+        cell.layer.cornerRadius = 5
+        
+        if(item.title != nil) {
+            //Case Movie
+            cell.typeLabel.text = "Movie"
+            cell.titleLabel.text = item.title
+            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
+            
+        } else if(item.known_for_department != nil) {
+            //Case Actor
+            cell.typeLabel.text = "Person"
+            cell.titleLabel.text = item.name
+            
+        } else {
+            //Case Show
+            cell.typeLabel.text = "Show"
+            cell.titleLabel.text = item.name
+            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
+            
         }
     }
     
-    
-    func applySearch(searchItems:[TVItem]) {
-        self.searchItems = searchItems
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    func getCellImage (cell: TVCell, item: TVItem) {
+            if item.poster_path != "" && item.poster_path != nil {
+                getImage(searchTerms: item.poster_path!) { (result) in
+                    switch result {
+                        case .failure(let error):
+                           print(error)
+                        case .success(let data):
+                            DispatchQueue.main.async {
+                                cell.imageView.image = UIImage(data: data)
+                                cell.titleLabel.text = ""
+                        }
+                    }
+                }
+            } else if item.profile_path != "" && item.profile_path != nil {
+                getImage(searchTerms: item.profile_path!) { (result) in
+                    switch result {
+                        case .failure(let error):
+                           print(error)
+                        case .success(let data):
+                            DispatchQueue.main.async {
+                                cell.imageView.image = UIImage(data: data)
+    //                            cell.titleLabel.text = ""
+                        }
+                    }
+                }
+            }
+        }
 }

@@ -11,7 +11,7 @@ import UIKit
 
 var favoritesMap = [Int:TVItem]()
 
-class FavoritesCollection: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
         
     var navDelegate:NavigationDelegate?
     
@@ -73,38 +73,44 @@ class FavoritesCollection: UIView, UICollectionViewDataSource, UICollectionViewD
         print(favoritesMap)
     }
     
+    func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
+            Request.getImage(searchTerms: searchTerms) { result in
+            completion(result)
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension FavoritesCollection: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return favoritesMap.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: searchCellID, for: indexPath) as! TVCell
-
         let item = Array(favoritesMap.values)[indexPath.row]
-        cell.backgroundColor = .white
-        cell.layer.cornerRadius = 5
-        cell.setItem(item: item)
-        
-        if(item.title != nil) {
-            //Case Movie
-            cell.typeLabel.text = "Movie"
-            cell.titleLabel.text = item.title
-            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
-            
-        } else if(item.known_for_department != nil) {
-            //Case Actor
-            cell.typeLabel.text = "Person"
-            cell.titleLabel.text = item.name
-            
-        } else {
-            //Case Show
-            cell.typeLabel.text = "Show"
-            cell.titleLabel.text = item.name
-            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
-            
-        }
-                
+        setCellDefaults(cell: cell, item: item)
+        getCellImage(cell: cell, item: item)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: cellWidth, height: cellHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: cellInsetSize, left: cellInsetSize, bottom: cellInsetSize, right: cellInsetSize)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item:TVItem = Array(favoritesMap.values)[indexPath.row]
+        navDelegate?.cellTapped(item)
+    }
+    
+    func getCellImage (cell: TVCell, item: TVItem) {
         if item.poster_path != "" && item.poster_path != nil {
             getImage(searchTerms: item.poster_path!) { (result) in
                 switch result {
@@ -129,33 +135,31 @@ class FavoritesCollection: UIView, UICollectionViewDataSource, UICollectionViewD
                     }
                 }
             }
-        } else {
-            return cell
         }
+    }
+    
+    func setCellDefaults(cell: TVCell, item: TVItem) {
+        cell.setItem(item: item)
+        cell.backgroundColor = .white
+        cell.layer.cornerRadius = 5
         
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: cellWidth, height: cellHeight)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: cellInsetSize, left: cellInsetSize, bottom: cellInsetSize, right: cellInsetSize)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item:TVItem = Array(favoritesMap.values)[indexPath.row]
-        navDelegate?.cellTapped(item)
-    }
-    
-    func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
-            Request.getImage(searchTerms: searchTerms) { result in
-            completion(result)
+        if(item.title != nil) {
+            //Case Movie
+            cell.typeLabel.text = "Movie"
+            cell.titleLabel.text = item.title
+            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
+            
+        } else if(item.known_for_department != nil) {
+            //Case Actor
+            cell.typeLabel.text = "Person"
+            cell.titleLabel.text = item.name
+            
+        } else {
+            //Case Show
+            cell.typeLabel.text = "Show"
+            cell.titleLabel.text = item.name
+            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
+            
         }
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
