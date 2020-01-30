@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController, UISearchBarDelegate {
+class HomeViewController: UIViewController {
     
     let backgroundImage:UIImageView = {
         let image = UIImageView()
@@ -98,6 +98,19 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
         ])
     }
     
+
+    
+    override func viewDidAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    @objc func browseButtonClicked() {
+        navigationController?.pushViewController(BrowseViewController(), animated: true)
+    }
+}
+
+extension HomeViewController:UISearchBarDelegate {
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         Request.searchMulti(searchTerms: searchBar.text!) { [weak self] result in
         switch result {
@@ -111,13 +124,5 @@ class HomeViewController: UIViewController, UISearchBarDelegate {
                  }
              }
          }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        navigationController?.setNavigationBarHidden(true, animated: animated)
-    }
-    
-    @objc func browseButtonClicked() {
-        navigationController?.pushViewController(BrowseViewController(), animated: true)
     }
 }

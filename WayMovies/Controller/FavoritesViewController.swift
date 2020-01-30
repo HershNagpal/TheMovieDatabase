@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class FavoritesViewController: UIViewController, NavigationDelegate {
+class FavoritesViewController: UIViewController {
     
     let searchBarHeight:CGFloat = 30
     
@@ -49,7 +49,11 @@ class FavoritesViewController: UIViewController, NavigationDelegate {
             favoritesCollection.rightAnchor.constraint(equalTo: view.rightAnchor)
         ])
     }
-    
+
+}
+
+
+extension FavoritesViewController:NavigationDelegate {
     func cellTapped(_ item: TVItem) {
         navigationController?.pushViewController(DetailViewController(item: item), animated: true)
     }

@@ -15,7 +15,7 @@ class TVCell: UICollectionViewCell {
     private let labelHeight:CGFloat = 50
     private let labelWidth:CGFloat = 175
     private let favoriteButtonHeight:CGFloat = 20
-    private let favoriteButtonWidth:CGFloat = 30
+    private let favoriteButtonWidth:CGFloat = 25
     
     func setItem(item: TVItem) {
         self.item = item

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDelegate, UITableViewDelegate, UITableViewDataSource {
+class BrowseViewController: UIViewController {
 
     private let searchBarHeight:CGFloat = 30
     private let collectionHeight:CGFloat = 232
@@ -198,21 +198,19 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
         }
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        Request.searchMulti(searchTerms: searchBar.text!) { [weak self] result in
-        switch result {
-             case .failure(let error):
-                 print(error)
-             case .success(let items):
-                 DispatchQueue.main.async {
-                    let vc = SearchViewController()
-                    vc.applySearch(searchItems: items)
-                    self?.navigationController?.pushViewController(vc, animated: true)
-                 }
-             }
-         }
+    @objc func viewFavorites(sender: UIBarButtonItem) {
+        navigationController?.pushViewController(FavoritesViewController(), animated: true)
     }
     
+}
+
+extension BrowseViewController: NavigationDelegate {
+    func cellTapped(_ item: TVItem) {
+        navigationController?.pushViewController(DetailViewController(item: item), animated: true)
+    }
+}
+
+extension BrowseViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
@@ -231,15 +229,6 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
             cell.textLabel?.text = "Enter Search Terms"
         }
         return cell
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText != "" {
-            suggestionTable.reloadData()
-            suggestionTable.isHidden = false
-        } else {
-            suggestionTable.isHidden = true
-        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -297,19 +286,34 @@ class BrowseViewController: UIViewController, UISearchBarDelegate, NavigationDel
             suggestionTable.isHidden = true
         }
     }
+}
+
+extension BrowseViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        Request.searchMulti(searchTerms: searchBar.text!) { [weak self] result in
+        switch result {
+             case .failure(let error):
+                 print(error)
+             case .success(let items):
+                 DispatchQueue.main.async {
+                    let vc = SearchViewController()
+                    vc.applySearch(searchItems: items)
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                 }
+             }
+         }
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText != "" {
+            suggestionTable.reloadData()
+            suggestionTable.isHidden = false
+        } else {
+            suggestionTable.isHidden = true
+        }
+    }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//        suggestionTable.removeFromSuperview()
         suggestionTable.isHidden = true
     }
-    
-    func cellTapped(_ item: TVItem) {
-        navigationController?.pushViewController(DetailViewController(item: item), animated: true)
-    }
-    
-    @objc
-    func viewFavorites(sender: UIBarButtonItem) {
-        navigationController?.pushViewController(FavoritesViewController(), animated: true)
-    }
-    
 }
