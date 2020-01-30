@@ -85,7 +85,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Gets the list of TVItems associated with the given CollectionType
      */
-    func setTypeMethods() {
+    private func setTypeMethods() {
         switch self.type {
         case CollectionType.TopRatedMovies:
             self.TVCollectionLabel.text = "Top Rated Movies"
@@ -111,7 +111,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Adds all elementts to the subview and calls constraining helper methods.
      */
-    func createElementsAndConstraints() {
+    private func createElementsAndConstraints() {
         addSubview(TVCollectionLabel)
         addSubview(TVCollection)
         TVCollectionLabelConstraints()
@@ -121,7 +121,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Sets delegates and registers cell reuse ID's
      */
-    func registerCollectionCellsAndDelegates() {
+    private func registerCollectionCellsAndDelegates() {
         TVCollection.delegate = self
         TVCollection.dataSource = self
         TVCollection.register(TVCell.self, forCellWithReuseIdentifier: TVCellID)
@@ -130,7 +130,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Sets up constraints for the TVCollection label
      */
-    func TVCollectionLabelConstraints() {
+    private func TVCollectionLabelConstraints() {
         NSLayoutConstraint.activate([
             TVCollectionLabel.topAnchor.constraint(equalTo: self.topAnchor),
             TVCollectionLabel.leftAnchor.constraint(equalTo: self.leftAnchor),
@@ -142,7 +142,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Sets up constraints for the TVCollection
      */
-    func TVCollectionConstraints() {
+    private func TVCollectionConstraints() {
         NSLayoutConstraint.activate([
             TVCollection.topAnchor.constraint(equalTo: TVCollectionLabel.bottomAnchor),
             TVCollection.leftAnchor.constraint(equalTo: self.leftAnchor),
@@ -154,7 +154,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Calls the API retrieval of top rated movies in the Request class and applies the results to the list of TVItems
      */
-    func getTopRatedMovies() {
+    private func getTopRatedMovies() {
         Request.getTopRatedMovies { [weak self] result in
             switch result {
             case .failure(let error):
@@ -171,7 +171,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Calls the API retrieva of popular movies  in the Request class and applies the results to the list of TVItems
      */
-    func getPopularMovies() {
+    private func getPopularMovies() {
         Request.getPopularMovies { [weak self] result in
             switch result {
             case .failure(let error):
@@ -188,7 +188,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Calls the API retrieval of popular shows in the Request class and applies the results to the list of TVItems
      */
-    func getPopularShows() {
+    private func getPopularShows() {
         Request.getPopularShows { [weak self] result in
             switch result {
             case .failure(let error):
@@ -205,7 +205,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Calls the API retrieval of popular people  in the Request class and applies the results to the list of TVItems
      */
-    func getPopularPeople() {
+    private func getPopularPeople() {
         Request.getPopularPeople { [weak self] result in
             switch result {
             case .failure(let error):
@@ -222,7 +222,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Calls the API retrieval of top rated shows in the Request class and applies the results to the list of TVItems
      */
-    func getTopRatedShows() {
+    private func getTopRatedShows() {
         Request.getTopRatedShows { [weak self] result in
             switch result {
             case .failure(let error):
@@ -239,7 +239,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Calls the API retrieval of upcoming movies in the Request class and applies the results to the list of TVItems
      */
-    func getUpcomingMovies() {
+    private func getUpcomingMovies() {
         Request.getUpcomingMovies { [weak self] result in
             switch result {
             case .failure(let error):
@@ -256,7 +256,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Calls the API retrieval of the poster image of a TVItem in the Request class and returns the image location when escaping
      */
-    func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
+    private func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
         Request.getImage(searchTerms: searchTerms) { result in
         completion(result)
         }
@@ -269,7 +269,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Sets all attributes of the cells in the collection to their defaults
      */
-    func setCellDefaults(cell: TVCell, item: TVItem) {
+    private func setCellDefaults(cell: TVCell, item: TVItem) {
         cell.setItem(item: item)
         cell.backgroundColor = .white
         cell.layer.cornerRadius = 5
@@ -297,7 +297,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     /**
      Applies the image retrieved using the getImage method to the cell
      */
-    func getCellImage(cell: TVCell, item: TVItem) {
+    private func getCellImage(cell: TVCell, item: TVItem) {
         if item.poster_path != "" && item.poster_path != nil {
             getImage(searchTerms: item.poster_path!) { (result) in
                 switch result {
