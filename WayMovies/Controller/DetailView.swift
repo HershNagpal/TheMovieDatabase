@@ -71,18 +71,18 @@ class DetailView: UIView {
             typeLabel.text = "Movie"
             titleLabel.text = item.title
             ratingLabel.text = "Average User Rating: \(String(item.vote_average!))"
-            
+            imageView.image = UIImage(named: "movie_default.jpg")
         } else if(item.known_for_department != nil) {
             //Case Actor
             typeLabel.text = "Person"
             titleLabel.text = item.name
-            
+            imageView.image = UIImage(named: "profile_default.jpg")
         } else {
             //Case Show
             typeLabel.text = "Show"
             titleLabel.text = item.name
             ratingLabel.text = "Average User Rating: \(String(item.vote_average!))"
-            
+            imageView.image = UIImage(named: "movie_default.jpg")
         }
         
         if item.poster_path != "" && item.poster_path != nil {

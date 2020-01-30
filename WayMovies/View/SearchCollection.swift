@@ -83,23 +83,26 @@ class SearchCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         let item = searchItems[indexPath.row]
         cell.backgroundColor = .white
         cell.layer.cornerRadius = 5
+        cell.setItem(item: item)
         
         if(item.title != nil) {
             //Case Movie
             cell.typeLabel.text = "Movie"
             cell.titleLabel.text = item.title
             cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
+            cell.imageView.image = UIImage(named: "movie_default.jpg")
             
         } else if(item.known_for_department != nil) {
             //Case Actor
             cell.typeLabel.text = "Person"
             cell.titleLabel.text = item.name
-            
+            cell.imageView.image = UIImage(named: "profile_default.jpg")
         } else {
             //Case Show
             cell.typeLabel.text = "Show"
             cell.titleLabel.text = item.name
             cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
+            cell.imageView.image = UIImage(named: "movie_default.jpg")
             
         }
                 

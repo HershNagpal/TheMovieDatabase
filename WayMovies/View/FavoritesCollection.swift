@@ -20,12 +20,57 @@ class FavoritesCollection: UIView, UICollectionViewDataSource, UICollectionViewD
     let cellWidth:CGFloat = 200
     let cellInsetSize:CGFloat = 1
     
+    let favoritesCollection:UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collection = UICollectionView(frame: CGRect(x:0, y:0, width:0, height:0), collectionViewLayout: layout)
+        layout.scrollDirection = .vertical
+        collection.backgroundColor = .black
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        collection.isScrollEnabled = true
+        return collection
+    }()
+    
+    init() {
+//        self.searchItems = [TVItem]()
+        super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        registerCollectionCellsAndDelegates()
+        createElementsAndConstraints()
+    }
+    
+    func createElementsAndConstraints() {
+        addSubview(favoritesCollection)
+        favoritesCollectionConstraints()
+    }
+    
+    func registerCollectionCellsAndDelegates() {
+        favoritesCollection.delegate = self
+        favoritesCollection.dataSource = self
+        favoritesCollection.register(TVCell.self, forCellWithReuseIdentifier: searchCellID)
+    }
+    
+    func favoritesCollectionConstraints() {
+        NSLayoutConstraint.activate([
+            favoritesCollection.topAnchor.constraint(equalTo: self.topAnchor),
+            favoritesCollection.leftAnchor.constraint(equalTo: self.leftAnchor),
+            favoritesCollection.rightAnchor.constraint(equalTo: self.rightAnchor),
+            favoritesCollection.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+    }
+    
     static func removeFromFavorites(item:TVItem) {
         favoritesMap.removeValue(forKey: item.id)
     }
     
+    static func isInFavorites(item:TVItem) -> Bool {
+        if favoritesMap[item.id] != nil{
+            return true
+        }
+        return false
+    }
+    
     static func addToFavorites(item:TVItem) {
         favoritesMap[item.id] = item
+        print(favoritesMap)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -39,6 +84,7 @@ class FavoritesCollection: UIView, UICollectionViewDataSource, UICollectionViewD
         let item = Array(favoritesMap.values)[indexPath.row]
         cell.backgroundColor = .white
         cell.layer.cornerRadius = 5
+        cell.setItem(item: item)
         
         if(item.title != nil) {
             //Case Movie
@@ -88,10 +134,6 @@ class FavoritesCollection: UIView, UICollectionViewDataSource, UICollectionViewD
         }
         
         return cell
-    }
-    
-    init() {
-        super.init(frame: CGRect())
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

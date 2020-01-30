@@ -121,7 +121,28 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         let item = TVList[indexPath.row]
         cell.backgroundColor = .white
         cell.titleLabel.text = item.title ?? item.name ?? "Untitled Movie Lol"
+        cell.setItem(item: item)
         
+        if(item.title != nil) {
+            //Case Movie
+//            cell.typeLabel.text = "Movie"
+            cell.titleLabel.text = item.title
+            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
+            cell.imageView.image = UIImage(named: "movie_default.jpg")
+            
+        } else if(item.known_for_department != nil) {
+            //Case Actor
+//            cell.typeLabel.text = "Person"
+            cell.titleLabel.text = item.name
+            cell.imageView.image = UIImage(named: "profile_default.jpg")
+        } else {
+            //Case Show
+//            cell.typeLabel.text = "Show"
+            cell.titleLabel.text = item.name
+            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
+            cell.imageView.image = UIImage(named: "movie_default.jpg")
+            
+        }
                 
         if item.poster_path != "" && item.poster_path != nil {
             getImage(searchTerms: item.poster_path!) { (result) in
@@ -132,6 +153,7 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
                         DispatchQueue.main.async {
                             cell.imageView.image = UIImage(data: data)
                             cell.titleLabel.text = ""
+                            cell.ratingLabel.text = ""
                     }
                 }
             }

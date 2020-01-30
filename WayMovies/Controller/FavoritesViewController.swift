@@ -43,7 +43,7 @@ class FavoritesViewController: UIViewController, NavigationDelegate {
     
     func searchCollectionConstraints() {
         NSLayoutConstraint.activate([
-            favoritesCollection.topAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor),
+            favoritesCollection.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
             favoritesCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             favoritesCollection.leftAnchor.constraint(equalTo: view.leftAnchor),
             favoritesCollection.rightAnchor.constraint(equalTo: view.rightAnchor)

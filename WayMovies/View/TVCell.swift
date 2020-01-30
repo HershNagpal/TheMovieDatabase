@@ -11,11 +11,18 @@ import UIKit
 
 class TVCell: UICollectionViewCell {
     
-    private let item:TVItem
+    private var item:TVItem?
     private let labelHeight:CGFloat = 50
     private let labelWidth:CGFloat = 175
-    private let favoriteButtonHeight:CGFloat = 25
-    private let favoriteButtonWidth:CGFloat = 25
+    private let favoriteButtonHeight:CGFloat = 20
+    private let favoriteButtonWidth:CGFloat = 30
+    
+    func setItem(item: TVItem) {
+        self.item = item
+        if(FavoritesCollection.isInFavorites(item: item)) {
+            favoriteButton.isSelected = true
+        }
+    }
     
     let imageView: UIImageView = {
         let label = UIImageView()
@@ -58,15 +65,16 @@ class TVCell: UICollectionViewCell {
     
     lazy var favoriteButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .magenta
+//        button.backgroundColor = .magenta
         button.addTarget(self, action: #selector(favoriteButtonClicked), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-//        button.setImage(UIImage(named: "love.png"), for: .selected)
-//        button.setImage(UIImage(named: "unlove.png"), for: .normal)
+        button.setImage(UIImage(named: "love.png"), for: .selected)
+        button.setImage(UIImage(named: "unlove.png"), for: .normal)
         return button
     }()
     
     override init(frame: CGRect) {
+//        self.item = item
         super.init(frame: frame)
         addSubview(imageView)
         addSubview(titleLabel)
@@ -129,8 +137,11 @@ class TVCell: UICollectionViewCell {
     }
     
     @objc func favoriteButtonClicked() {
-        FavoritesCollection.addToFavorites(item: )
-//        print("Yee yee")
+        if(!favoriteButton.isSelected) {
+            FavoritesCollection.addToFavorites(item: item!)
+        } else {
+            FavoritesCollection.removeFromFavorites(item: item!)
+        }
         favoriteButton.isSelected = !favoriteButton.isSelected
     }
 }

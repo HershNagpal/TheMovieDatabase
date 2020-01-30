@@ -37,11 +37,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
         return searchBar
     }()
     
-    private var searchItems = [TVItem]() {
-        didSet {
-            searchCollection.applySearch(searchItems: self.searchItems)
-        }
-    }
+    private var searchItems = [TVItem]()
     
     func setUpNavBar() {
         self.navigationController!.navigationBar.barStyle = .black
@@ -149,6 +145,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, NavigationDel
     
     func applySearch(searchItems: [TVItem]) {
         self.searchItems = searchItems
+        searchCollection.applySearch(searchItems: searchItems)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
