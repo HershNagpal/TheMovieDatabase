@@ -9,14 +9,31 @@
 import UIKit
 
 
+/**
+ Each collection that displays any information about TVItems uses the TVCell to show information to the user.
+ */
 class TVCell: UICollectionViewCell {
     
+    // The TVItem associated with this TVCell
     private var item:TVItem?
+    
+    // The height of all labels on the TVCell
     private let labelHeight:CGFloat = 50
+    
+    // The width of all labels on the TVCell
     private let labelWidth:CGFloat = 175
+    
+    // The height of the favorite button element
     private let favoriteButtonHeight:CGFloat = 20
+    
+    // The width of the favorite button element
     private let favoriteButtonWidth:CGFloat = 25
     
+    /**
+     Sets this TVCell's item attribute to the given item.
+     
+    `Parameter item: The item to set this TVCell's item attribute to.`
+     */
     func setItem(item: TVItem) {
         self.item = item
         if(FavoritesCollection.isInFavorites(item: item)) {
@@ -24,6 +41,9 @@ class TVCell: UICollectionViewCell {
         }
     }
     
+    /**
+     Shows the image of the movie, show, or person associated with the TVItem this TVCell represents.
+     */
     let imageView: UIImageView = {
         let label = UIImageView()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -33,6 +53,9 @@ class TVCell: UICollectionViewCell {
         return label
     }()
     
+    /**
+    Shows the image of the movie, show, or person associated with the TVItem this TVCell represents.
+    */
     var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -43,6 +66,9 @@ class TVCell: UICollectionViewCell {
         return label
     }()
     
+    /**
+    Shows whether this TVCell represents a Show, Movie, or Person.
+    */
     var typeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -53,6 +79,9 @@ class TVCell: UICollectionViewCell {
         return label
     }()
     
+    /**
+    Shows the rating of the movie, show associated with the TVItem this TVCell represents. Empty if representing a Person.
+    */
     var ratingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -63,6 +92,9 @@ class TVCell: UICollectionViewCell {
         return label
     }()
     
+    /**
+    Shows a filled in heart if this TVCell represents a favorited TVItem; otherwise is empty.
+    */
     lazy var favoriteButton: UIButton = {
         let button = UIButton()
 //        button.backgroundColor = .magenta
@@ -73,9 +105,10 @@ class TVCell: UICollectionViewCell {
         return button
     }()
     
-    override init(frame: CGRect) {
-//        self.item = item
-        super.init(frame: frame)
+    /**
+     Adds all elementts to the subview and calls constraining helper methods.
+     */
+    private func createElementsAndConstraints() {
         addSubview(imageView)
         addSubview(titleLabel)
         addSubview(ratingLabel)
@@ -88,11 +121,20 @@ class TVCell: UICollectionViewCell {
         favoriteButtonConstraints()
     }
     
+    override init(frame: CGRect) {
+//        self.item = item
+        super.init(frame: frame)
+        createElementsAndConstraints()
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func imageViewConstraints() {
+    /**
+     Sets up constraints for the imageView of this TVCell.
+     */
+    private func imageViewConstraints() {
         NSLayoutConstraint.activate([
             imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             imageView.topAnchor.constraint(equalTo: self.topAnchor),
@@ -101,7 +143,10 @@ class TVCell: UICollectionViewCell {
         ])
     }
     
-    func titleLabelConstraints() {
+    /**
+     Sets up constraints for the titleLabel of this TVCell.
+     */
+    private func titleLabelConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
@@ -111,7 +156,10 @@ class TVCell: UICollectionViewCell {
         ])
     }
     
-    func typeLabelConstraints() {
+    /**
+     Sets up constraints for the typeLabel of this TVCell.
+     */
+    private func typeLabelConstraints() {
         NSLayoutConstraint.activate([
             typeLabel.bottomAnchor.constraint(equalTo: titleLabel.topAnchor),
             typeLabel.heightAnchor.constraint(equalToConstant: labelHeight)
@@ -119,7 +167,10 @@ class TVCell: UICollectionViewCell {
         ])
     }
     
-    func favoriteButtonConstraints() {
+    /**
+     Sets up constraints for the favoriteButton of this TVCell.
+     */
+    private func favoriteButtonConstraints() {
         NSLayoutConstraint.activate([
             favoriteButton.topAnchor.constraint(equalTo: imageView.topAnchor, constant:favoriteButtonHeight/2),
             favoriteButton.rightAnchor.constraint(equalTo: imageView.rightAnchor, constant: -favoriteButtonHeight/2),
@@ -128,7 +179,10 @@ class TVCell: UICollectionViewCell {
         ])
     }
     
-    func ratingLabelConstraints() {
+    /**
+     Sets up constraints for the ratingLabel of this TVCell.
+     */
+    private func ratingLabelConstraints() {
         NSLayoutConstraint.activate([
             ratingLabel.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor, constant: labelHeight/2),
             ratingLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
@@ -136,7 +190,10 @@ class TVCell: UICollectionViewCell {
         ])
     }
     
-    @objc func favoriteButtonClicked() {
+    /**
+     Adds or removes the this TVCell's item from the global favorites list when the favorite button is clicked.
+     */
+    @objc private func favoriteButtonClicked() {
         if(!favoriteButton.isSelected) {
             FavoritesCollection.addToFavorites(item: item!)
         } else {
