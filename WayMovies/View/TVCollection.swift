@@ -9,19 +9,41 @@
 import Foundation
 import UIKit
 
-class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+/**
+ Shows the TVItems from various calls such as Top Movies, Popular Shows, etc.
+ */
+class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
+    
+    // The list of TVItems retrieved from the specified group
     private var TVList = [TVItem]()
+    
+    // Cell reuse ID
     private let TVCellID:String = "CellID"
-
+    
+    // The group of TVItems to show (Top Rated Movies, Popular Shows, Etc.)
     private let type:CollectionType
+    
+    // The height of the Label above the collection
     private let labelHeight:CGFloat = 30
+    
+    // The height of the collection
     private let collectionHeight:CGFloat = 202
+    
+    // The height of each cell in the collection
     private let cellHeight:CGFloat = 200
+    
+    // The width of each cell in the collection
     private let cellWidth:CGFloat = 145
+    
+    // The size of the insets around each cell in the collection
     private let cellInsetSize:CGFloat = 1
     
+    // The NavigationDelegate which allows
     var navDelegate:NavigationDelegate?
     
+    /**
+     The CollectionView that shows all of the TVItems as TVCells
+     */
     let TVCollection:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: CGRect(x:0, y:0, width:0, height:0), collectionViewLayout: layout)
@@ -32,6 +54,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         return collection
     }()
     
+    /**
+     Shows the group of movies being displayed by the collection
+     */
     let TVCollectionLabel:UILabel = {
         let label = UILabel()
         label.text = ""
@@ -57,6 +82,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         self.setTypeMethods()
     }
     
+    /**
+     Gets the list of TVItems associated with the given CollectionType
+     */
     func setTypeMethods() {
         switch self.type {
         case CollectionType.TopRatedMovies:
@@ -80,6 +108,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         }
     }
     
+    /**
+     Adds all elementts to the subview and calls constraining helper methods.
+     */
     func createElementsAndConstraints() {
         addSubview(TVCollectionLabel)
         addSubview(TVCollection)
@@ -87,12 +118,18 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         TVCollectionConstraints()
     }
     
+    /**
+     Sets delegates and registers cell reuse ID's
+     */
     func registerCollectionCellsAndDelegates() {
         TVCollection.delegate = self
         TVCollection.dataSource = self
         TVCollection.register(TVCell.self, forCellWithReuseIdentifier: TVCellID)
     }
     
+    /**
+     Sets up constraints for the TVCollection label
+     */
     func TVCollectionLabelConstraints() {
         NSLayoutConstraint.activate([
             TVCollectionLabel.topAnchor.constraint(equalTo: self.topAnchor),
@@ -102,6 +139,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         ])
     }
     
+    /**
+     Sets up constraints for the TVCollection
+     */
     func TVCollectionConstraints() {
         NSLayoutConstraint.activate([
             TVCollection.topAnchor.constraint(equalTo: TVCollectionLabel.bottomAnchor),
@@ -111,31 +151,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         ])
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return TVList.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = TVCollection.dequeueReusableCell(withReuseIdentifier: TVCellID, for: indexPath) as! TVCell
-        let item = TVList[indexPath.row]
-        setCellDefaults(cell: cell, item: item)
-        getCellImage(cell: cell, item: item)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item:TVItem = TVList[indexPath.row]
-        navDelegate?.cellTapped(item)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: cellWidth, height: cellHeight)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: cellInsetSize, left: cellInsetSize, bottom: cellInsetSize, right: cellInsetSize)
-    }
-    
+    /**
+     Calls the API retrieval of top rated movies in the Request class and applies the results to the list of TVItems
+     */
     func getTopRatedMovies() {
         Request.getTopRatedMovies { [weak self] result in
             switch result {
@@ -150,6 +168,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         }
     }
     
+    /**
+     Calls the API retrieva of popular movies  in the Request class and applies the results to the list of TVItems
+     */
     func getPopularMovies() {
         Request.getPopularMovies { [weak self] result in
             switch result {
@@ -164,6 +185,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         }
     }
     
+    /**
+     Calls the API retrieval of popular shows in the Request class and applies the results to the list of TVItems
+     */
     func getPopularShows() {
         Request.getPopularShows { [weak self] result in
             switch result {
@@ -178,6 +202,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         }
     }
     
+    /**
+     Calls the API retrieval of popular people  in the Request class and applies the results to the list of TVItems
+     */
     func getPopularPeople() {
         Request.getPopularPeople { [weak self] result in
             switch result {
@@ -192,6 +219,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         }
     }
     
+    /**
+     Calls the API retrieval of top rated shows in the Request class and applies the results to the list of TVItems
+     */
     func getTopRatedShows() {
         Request.getTopRatedShows { [weak self] result in
             switch result {
@@ -206,6 +236,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         }
     }
     
+    /**
+     Calls the API retrieval of upcoming movies in the Request class and applies the results to the list of TVItems
+     */
     func getUpcomingMovies() {
         Request.getUpcomingMovies { [weak self] result in
             switch result {
@@ -220,6 +253,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         }
     }
     
+    /**
+     Calls the API retrieval of the poster image of a TVItem in the Request class and returns the image location when escaping
+     */
     func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
         Request.getImage(searchTerms: searchTerms) { result in
         completion(result)
@@ -230,6 +266,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         fatalError("init(coder:) has not been implemented")
     }
     
+    /**
+     Sets all attributes of the cells in the collection to their defaults
+     */
     func setCellDefaults(cell: TVCell, item: TVItem) {
         cell.setItem(item: item)
         cell.backgroundColor = .white
@@ -255,6 +294,9 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         }
     }
     
+    /**
+     Applies the image retrieved using the getImage method to the cell
+     */
     func getCellImage(cell: TVCell, item: TVItem) {
         if item.poster_path != "" && item.poster_path != nil {
             getImage(searchTerms: item.poster_path!) { (result) in
@@ -284,4 +326,46 @@ class TVCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource
         }
     }
     
+}
+
+extension TVCollection: UICollectionViewDelegate, UICollectionViewDataSource {
+    /**
+     Returns the number of cells in the list
+     */
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+       return TVList.count
+    }
+
+    /**
+     Returns a cell with the information of a specifc index of the list of TVItems to display in this collection
+     */
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+       let cell = TVCollection.dequeueReusableCell(withReuseIdentifier: TVCellID, for: indexPath) as! TVCell
+       let item = TVList[indexPath.row]
+       setCellDefaults(cell: cell, item: item)
+       getCellImage(cell: cell, item: item)
+       return cell
+    }
+
+    /**
+     Navigates to the details page of the TVItem represented by this cell when it is tapped
+     */
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+       let item:TVItem = TVList[indexPath.row]
+       navDelegate?.cellTapped(item)
+    }
+
+    /**
+     Returns the dimensions of the cell
+     */
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+       return CGSize(width: cellWidth, height: cellHeight)
+    }
+
+    /**
+     Returns the size of the insets around the cell
+     */
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+       return UIEdgeInsets(top: cellInsetSize, left: cellInsetSize, bottom: cellInsetSize, right: cellInsetSize)
+    }
 }
