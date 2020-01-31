@@ -24,10 +24,10 @@ class TVCell: UICollectionViewCell {
     private let labelWidth:CGFloat = 175
     
     // The height of the favorite button element
-    private let favoriteButtonHeight:CGFloat = 20
+    private let favoriteButtonHeight:CGFloat = 40
     
     // The width of the favorite button element
-    private let favoriteButtonWidth:CGFloat = 25
+    private let favoriteButtonWidth:CGFloat = 40
     
     /**
      Sets this TVCell's item attribute to the given item.
@@ -45,12 +45,13 @@ class TVCell: UICollectionViewCell {
      Shows the image of the movie, show, or person associated with the TVItem this TVCell represents.
      */
     let imageView: UIImageView = {
-        let label = UIImageView()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.contentMode = .scaleAspectFill
-        label.clipsToBounds = true
-        label.backgroundColor = UIColor.darkGray
-        return label
+        let image = UIImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.contentMode = .scaleAspectFill
+        image.clipsToBounds = true
+        image.backgroundColor = UIColor.darkGray
+        image.layer.cornerRadius = 5
+        return image
     }()
     
     /**
@@ -100,8 +101,9 @@ class TVCell: UICollectionViewCell {
 //        button.backgroundColor = .magenta
         button.addTarget(self, action: #selector(favoriteButtonClicked), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "love.png"), for: .selected)
-        button.setImage(UIImage(named: "unlove.png"), for: .normal)
+        button.setImage(UIImage(named: "love.png")?.withTintColor(red), for: .selected)
+        button.setImage(UIImage(named: "love.png")?.withTintColor(gray), for: .normal)
+        
         return button
     }()
     
@@ -172,8 +174,8 @@ class TVCell: UICollectionViewCell {
      */
     private func favoriteButtonConstraints() {
         NSLayoutConstraint.activate([
-            favoriteButton.topAnchor.constraint(equalTo: imageView.topAnchor, constant:favoriteButtonHeight/2),
-            favoriteButton.rightAnchor.constraint(equalTo: imageView.rightAnchor, constant: -favoriteButtonHeight/2),
+            favoriteButton.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -(favoriteButtonHeight/10)),
+            favoriteButton.rightAnchor.constraint(equalTo: imageView.rightAnchor, constant: -(favoriteButtonHeight/10)),
             favoriteButton.heightAnchor.constraint(equalToConstant: favoriteButtonHeight),
             favoriteButton.widthAnchor.constraint(equalToConstant: favoriteButtonWidth)
         ])

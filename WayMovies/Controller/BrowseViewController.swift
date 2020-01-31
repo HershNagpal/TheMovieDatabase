@@ -10,8 +10,8 @@ import UIKit
 
 class BrowseViewController: UIViewController {
 
-    private let searchBarHeight:CGFloat = 30
-    private let collectionHeight:CGFloat = 232
+    private let searchBarHeight:CGFloat = 40
+    private let collectionHeight:CGFloat = 250
     
     let scrollView:UIScrollView = {
         let scrollView = UIScrollView()
@@ -24,6 +24,7 @@ class BrowseViewController: UIViewController {
         let table = UITableView()
         table.rowHeight = 40
         table.separatorStyle = .singleLine
+        table.backgroundColor = .clear
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
     }()
@@ -64,14 +65,17 @@ class BrowseViewController: UIViewController {
     
     let backgroundView:UIView = {
         let view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = blue
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     let searchBar:UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.searchBarStyle = .prominent
+        searchBar.searchBarStyle = .minimal
+        searchBar.backgroundColor = .clear
+        searchBar.tintColor = .white
+        searchBar.searchTextField.textColor = .white
         searchBar.placeholder = "Search"
         searchBar.showsCancelButton = true
         searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -87,8 +91,8 @@ class BrowseViewController: UIViewController {
     func setUpNavBar() {
         self.navigationController!.navigationBar.barStyle = .black
         self.navigationController!.navigationBar.isTranslucent = true
-        self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        self.navigationController!.navigationBar.tintColor = #colorLiteral(red: 1, green: 0.99997437, blue: 0.9999912977, alpha: 1)
+        self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: green]
+        self.navigationController!.navigationBar.tintColor = green
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Favorites", style: .done, target: self, action: #selector(viewFavorites))
     }
     

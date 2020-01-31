@@ -19,6 +19,13 @@ class DetailViewController: UIViewController {
         return detailView
     }()
     
+    let backgroundView:UIView = {
+        let view = UIView()
+        view.backgroundColor = blue
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     init(item: TVItem) {
         self.item = item
         super.init(nibName: nil, bundle: nil)
@@ -35,9 +42,11 @@ class DetailViewController: UIViewController {
     }
     
     func createElementsAndConstraints() {
+        view.addSubview(backgroundView)
         view.addSubview(detailView)
         detailView.setDetails(item: item)
         detailViewConstraints()
+        backgroundViewConstraints()
     }
     
     func detailViewConstraints() {
@@ -46,6 +55,15 @@ class DetailViewController: UIViewController {
             detailView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             detailView.leftAnchor.constraint(equalTo: view.leftAnchor),
             detailView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
+    }
+    
+    func backgroundViewConstraints() {
+        NSLayoutConstraint.activate([
+            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            backgroundView.rightAnchor.constraint(equalTo: view.rightAnchor)
         ])
     }
     

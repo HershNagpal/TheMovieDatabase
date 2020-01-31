@@ -11,12 +11,14 @@ import Foundation
 import UIKit
 
 class DetailView: UIView {
-    private let imageHeight:CGFloat = 500
+    private let imageHeight:CGFloat = 630
     private let labelHeight:CGFloat = 40
     
     let imageView:UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
+        image.contentMode = .scaleAspectFill
+        image.clipsToBounds = true
         image.backgroundColor = .gray
         return image
     }()
@@ -37,7 +39,6 @@ class DetailView: UIView {
         label.textAlignment = .left
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
-//        label.text = "My Sweet Boi"
         return label
     }()
     
@@ -46,7 +47,6 @@ class DetailView: UIView {
         label.textAlignment = .left
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
-//        label.text = "TVShow"
         return label
     }()
     
@@ -68,18 +68,18 @@ class DetailView: UIView {
     func setDetails(item:TVItem) {
         if(item.title != nil) {
             //Case Movie
-            typeLabel.text = "Movie"
+            typeLabel.text = "MOVIE"
             titleLabel.text = item.title
             ratingLabel.text = "Average User Rating: \(String(item.vote_average!))"
             imageView.image = UIImage(named: "movie_default.jpg")
         } else if(item.known_for_department != nil) {
             //Case Actor
-            typeLabel.text = "Person"
+            typeLabel.text = "PERSON"
             titleLabel.text = item.name
             imageView.image = UIImage(named: "profile_default.jpg")
         } else {
             //Case Show
-            typeLabel.text = "Show"
+            typeLabel.text = "SHOW"
             titleLabel.text = item.name
             ratingLabel.text = "Average User Rating: \(String(item.vote_average!))"
             imageView.image = UIImage(named: "movie_default.jpg")

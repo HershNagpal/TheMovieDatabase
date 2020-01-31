@@ -24,7 +24,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     private let type:CollectionType
     
     // The height of the Label above the collection
-    private let labelHeight:CGFloat = 30
+    private let labelHeight:CGFloat = 40
     
     // The height of the collection
     private let collectionHeight:CGFloat = 202
@@ -48,7 +48,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: CGRect(x:0, y:0, width:0, height:0), collectionViewLayout: layout)
         layout.scrollDirection = .horizontal
-        collection.backgroundColor = .black
+        collection.backgroundColor = blue
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.isScrollEnabled = true
         return collection
@@ -60,7 +60,8 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     let TVCollectionLabel:UILabel = {
         let label = UILabel()
         label.text = ""
-        label.textColor = .white
+        label.textColor = translucent_green
+        label.font = label.font.withSize(25)
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -133,7 +134,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     private func TVCollectionLabelConstraints() {
         NSLayoutConstraint.activate([
             TVCollectionLabel.topAnchor.constraint(equalTo: self.topAnchor),
-            TVCollectionLabel.leftAnchor.constraint(equalTo: self.leftAnchor),
+            TVCollectionLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 3),
             TVCollectionLabel.rightAnchor.constraint(equalTo: self.rightAnchor),
             TVCollectionLabel.heightAnchor.constraint(equalToConstant: labelHeight)
         ])

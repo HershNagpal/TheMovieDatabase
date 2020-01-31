@@ -24,7 +24,7 @@ class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: CGRect(x:0, y:0, width:0, height:0), collectionViewLayout: layout)
         layout.scrollDirection = .vertical
-        collection.backgroundColor = .black
+        collection.backgroundColor = blue
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.isScrollEnabled = true
         return collection
@@ -70,7 +70,6 @@ class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
     
     static func addToFavorites(item:TVItem) {
         favoritesMap[item.id] = item
-        print(favoritesMap)
     }
     
     func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {

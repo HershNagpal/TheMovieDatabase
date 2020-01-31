@@ -8,19 +8,24 @@
 
 import UIKit
 
-var preferredFont:UIFont = .init()
-var preferredTextColor:UIColor = .white
+let gray:UIColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.7)
+let red:UIColor = UIColor(red: 0.7, green: 0.05, blue: 0.05, alpha: 0.9)
+let green:UIColor = UIColor(red: 1/256, green: 210/256, blue: 119/256, alpha: 1.0)
+let translucent_green:UIColor = UIColor(red: 1/256, green: 210/256, blue: 119/256, alpha: 0.8)
+let blue:UIColor = UIColor(red: 8/256, green: 28/256, blue: 36/256, alpha: 1.0)
 
 class HomeViewController: UIViewController {
     
     let moveUpHeight:CGFloat = 100
+    let logoHeight:CGFloat = 150
+    let logoWidth:CGFloat = 170
     
     let backgroundImage:UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = UIImage(named: "movie_default.jpg")
+        image.image = UIImage(named: "theater.jpg")
         image.tintColor = .black
         return image
     }()
@@ -36,23 +41,28 @@ class HomeViewController: UIViewController {
         let searchBar = UISearchBar()
         searchBar.searchBarStyle = .minimal
         searchBar.backgroundColor = .clear
+        searchBar.searchTextField.backgroundColor = gray
         searchBar.tintColor = .white
         searchBar.searchTextField.textColor = .white
+        searchBar.placeholder = "Search Movies, Actors, and TV Shows"
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         return searchBar
     }()
     
-    let homeLabel:UILabel = {
-        let label = UILabel()
-        label.text = "Search for Movies, Actors, and TV Shows"
-        label.textColor = .white
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    let homeLogo:UIImageView = {
+        let image = UIImageView()
+        image.contentMode = .scaleAspectFill
+        image.clipsToBounds = true
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.image = UIImage(named: "tmdb_green.jpg")
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
     }()
     
     let browseButton:UIButton = {
         let button = UIButton()
+        button.backgroundColor = translucent_green
+        button.layer.cornerRadius = 10
         button.setTitle("Browse", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(browseButtonClicked), for: .touchUpInside)
@@ -73,12 +83,12 @@ class HomeViewController: UIViewController {
         view.addSubview(backgroundImage)
         view.addSubview(blur)
         view.addSubview(searchBar)
-        view.addSubview(homeLabel)
+        view.addSubview(homeLogo)
         view.addSubview(browseButton)
         backgroundImageConstraints()
         blurConstraints()
         searchBarConstraints()
-        homeLabelConstraints()
+        homeLogoConstraints()
         browseButtonConstraints()
         blur.isHidden = true
     }
@@ -110,12 +120,12 @@ class HomeViewController: UIViewController {
         ])
     }
     
-    func homeLabelConstraints() {
+    func homeLogoConstraints() {
         NSLayoutConstraint.activate([
-            homeLabel.bottomAnchor.constraint(equalTo: searchBar.topAnchor, constant: -10),
-            homeLabel.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
-            homeLabel.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor),
-            homeLabel.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor)
+            homeLogo.bottomAnchor.constraint(equalTo: searchBar.topAnchor, constant: -100),
+            homeLogo.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
+            homeLogo.heightAnchor.constraint(equalToConstant: logoHeight),
+            homeLogo.widthAnchor.constraint(equalToConstant: logoWidth)
         ])
     }
     
@@ -150,7 +160,7 @@ class HomeViewController: UIViewController {
     func moveElementsUp() {
         UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
             self.searchBar.frame.origin.y -= self.moveUpHeight
-            self.homeLabel.frame.origin.y -= self.moveUpHeight
+            self.homeLogo.frame.origin.y -= (self.moveUpHeight-40)
             self.browseButton.frame.origin.y -= self.moveUpHeight
         }, completion: nil)
     }
@@ -158,7 +168,7 @@ class HomeViewController: UIViewController {
     func moveElementsDown() {
         UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
             self.searchBar.frame.origin.y += self.moveUpHeight
-            self.homeLabel.frame.origin.y += self.moveUpHeight
+            self.homeLogo.frame.origin.y += (self.moveUpHeight-40)
             self.browseButton.frame.origin.y += self.moveUpHeight
         }, completion: nil)
     }

@@ -24,12 +24,24 @@ class SearchViewController: UIViewController {
         table.rowHeight = 40
         table.separatorStyle = .singleLine
         table.translatesAutoresizingMaskIntoConstraints = false
+        table.backgroundColor = .clear
         return table
+    }()
+    
+    let backgroundView:UIView = {
+        let view = UIView()
+        view.backgroundColor = blue
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     let searchBar:UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.searchBarStyle = .prominent
+        searchBar.searchBarStyle = .minimal
+        searchBar.backgroundColor = .clear
+        searchBar.tintColor = .white
+        searchBar.searchTextField.textColor = .white
+        searchBar.placeholder = "Search"
         searchBar.showsCancelButton = true
         searchBar.placeholder = "Search"
         searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -41,8 +53,8 @@ class SearchViewController: UIViewController {
     func setUpNavBar() {
         self.navigationController!.navigationBar.barStyle = .black
         self.navigationController!.navigationBar.isTranslucent = true
-        self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        self.navigationController!.navigationBar.tintColor = #colorLiteral(red: 1, green: 0.99997437, blue: 0.9999912977, alpha: 1)
+        self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: green]
+        self.navigationController!.navigationBar.tintColor = translucent_green
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Favorites", style: .done, target: self, action: #selector(viewFavorites))
     }
     
@@ -74,10 +86,12 @@ class SearchViewController: UIViewController {
     }
     
     func createElementsAndConstraints() {
+        view.addSubview(backgroundView)
         view.addSubview(searchBar)
         view.addSubview(searchCollection)
         view.addSubview(suggestionTable)
         suggestionTable.isHidden = true
+        backgroundViewConstraints()
         searchBarConstraints()
         searchCollectionConstraints()
         suggestionTableConstraints()
@@ -89,6 +103,15 @@ class SearchViewController: UIViewController {
             searchCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             searchCollection.leftAnchor.constraint(equalTo: view.leftAnchor),
             searchCollection.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
+    }
+    
+    func backgroundViewConstraints() {
+        NSLayoutConstraint.activate([
+            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            backgroundView.rightAnchor.constraint(equalTo: view.rightAnchor)
         ])
     }
     
