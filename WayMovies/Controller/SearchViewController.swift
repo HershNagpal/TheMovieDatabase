@@ -24,6 +24,8 @@ class SearchViewController: UIViewController {
         table.rowHeight = 40
         table.separatorStyle = .singleLine
         table.translatesAutoresizingMaskIntoConstraints = false
+        table.tableFooterView = UIView(frame: CGRect.zero)
+        table.isScrollEnabled = false
         table.backgroundColor = .clear
         return table
     }()

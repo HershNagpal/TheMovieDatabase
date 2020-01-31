@@ -19,6 +19,13 @@ class FavoritesViewController: UIViewController {
         return collection
     }()
     
+    let backgroundView:UIView = {
+        let view = UIView()
+        view.backgroundColor = blue
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     init() {
         super.init(nibName:nil, bundle:nil)
     }
@@ -37,8 +44,19 @@ class FavoritesViewController: UIViewController {
     }
     
     func createElementsAndConstraints() {
+        view.addSubview(backgroundView)
         view.addSubview(favoritesCollection)
+        backgroundViewConstraints()
         searchCollectionConstraints()
+    }
+    
+    func backgroundViewConstraints() {
+        NSLayoutConstraint.activate([
+            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            backgroundView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
     }
     
     func searchCollectionConstraints() {

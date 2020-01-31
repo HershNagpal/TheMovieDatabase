@@ -25,6 +25,8 @@ class BrowseViewController: UIViewController {
         table.rowHeight = 40
         table.separatorStyle = .singleLine
         table.backgroundColor = .clear
+        table.tableFooterView = UIView(frame: CGRect.zero)
+        table.isScrollEnabled = false
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
     }()
@@ -137,6 +139,7 @@ class BrowseViewController: UIViewController {
         view.addSubview(searchBar)
         view.addSubview(scrollView)
         view.addSubview(suggestionTable)
+        
         suggestionTable.isHidden = true
         backgroundViewConstraints()
         searchBarConstraints()
@@ -173,6 +176,7 @@ class BrowseViewController: UIViewController {
     }
     
     func suggestionTableConstraints() {
+        
         NSLayoutConstraint.activate([
             suggestionTable.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             suggestionTable.leftAnchor.constraint(equalTo: view.leftAnchor),

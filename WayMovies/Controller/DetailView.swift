@@ -13,6 +13,7 @@ import UIKit
 class DetailView: UIView {
     private let imageHeight:CGFloat = 630
     private let labelHeight:CGFloat = 40
+    private let labelWidth:CGFloat = 170
     
     let imageView:UIImageView = {
         let image = UIImageView()
@@ -44,15 +45,19 @@ class DetailView: UIView {
     
     let typeLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
-        label.textColor = .white
+        label.textAlignment = .center
+        label.textColor = blue
+        label.font = label.font.withSize(40)
+        let insets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        label.drawText(in: CGRect().inset(by: insets))
+        label.backgroundColor = translucent_green
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let ratingLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.textAlignment = .center
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
 //        label.text = "5/5"
@@ -126,10 +131,12 @@ class DetailView: UIView {
         addSubview(descriptionLabel)
         addSubview(titleLabel)
         addSubview(typeLabel)
+        addSubview(ratingLabel)
         imageViewConstraints()
         descriptionLabelConstraints()
         nameLabelConstraints()
         typeLabelConstraints()
+        ratingLabelConstraints()
     }
     
     func imageViewConstraints() {
@@ -153,25 +160,27 @@ class DetailView: UIView {
     func descriptionLabelConstraints() {
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
-            descriptionLabel.leftAnchor.constraint(equalTo: self.leftAnchor),
-            descriptionLabel.rightAnchor.constraint(equalTo: self.rightAnchor)
+            descriptionLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5),
+            descriptionLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5)
         ])
     }
 
     
     func typeLabelConstraints() {
         NSLayoutConstraint.activate([
-            typeLabel.bottomAnchor.constraint(equalTo: titleLabel.topAnchor),
+            typeLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
             typeLabel.leftAnchor.constraint(equalTo: self.leftAnchor),
-            typeLabel.heightAnchor.constraint(equalToConstant: labelHeight)
+            typeLabel.heightAnchor.constraint(equalToConstant: labelHeight),
+            typeLabel.widthAnchor.constraint(equalToConstant: labelWidth)
         ])
     }
     
     func ratingLabelConstraints() {
         NSLayoutConstraint.activate([
-            typeLabel.bottomAnchor.constraint(equalTo: titleLabel.topAnchor),
-            typeLabel.leftAnchor.constraint(equalTo: self.leftAnchor),
-            typeLabel.heightAnchor.constraint(equalToConstant: labelHeight)
+            ratingLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
+            ratingLabel.leftAnchor.constraint(equalTo: typeLabel.rightAnchor),
+            ratingLabel.rightAnchor.constraint(equalTo: self.rightAnchor),
+            ratingLabel.heightAnchor.constraint(equalToConstant: labelHeight)
         ])
     }
     

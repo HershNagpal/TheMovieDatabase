@@ -131,7 +131,7 @@ class HomeViewController: UIViewController {
     
     func browseButtonConstraints() {
         NSLayoutConstraint.activate([
-            browseButton.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            browseButton.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 20),
             browseButton.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
             browseButton.widthAnchor.constraint(equalToConstant: 150)
         ])
@@ -161,7 +161,7 @@ class HomeViewController: UIViewController {
         UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
             self.searchBar.frame.origin.y -= self.moveUpHeight
             self.homeLogo.frame.origin.y -= (self.moveUpHeight-40)
-            self.browseButton.frame.origin.y -= self.moveUpHeight
+            self.browseButton.frame.origin.y -= (self.moveUpHeight+15)
         }, completion: nil)
     }
     
@@ -169,7 +169,7 @@ class HomeViewController: UIViewController {
         UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
             self.searchBar.frame.origin.y += self.moveUpHeight
             self.homeLogo.frame.origin.y += (self.moveUpHeight-40)
-            self.browseButton.frame.origin.y += self.moveUpHeight
+            self.browseButton.frame.origin.y += (self.moveUpHeight+15)
         }, completion: nil)
     }
     

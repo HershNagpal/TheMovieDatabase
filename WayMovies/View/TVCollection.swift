@@ -277,20 +277,23 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
         
         if(item.title != nil) {
             //Case Movie
-            cell.typeLabel.text = "Movie"
+//            cell.typeLabel.text = "Movie"
             cell.titleLabel.text = item.title
-            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
+            cell.ratingLabel.text = "Avg. Rating: \(String(item.vote_average!))"
+            cell.imageView.image = UIImage(named: "movie_default.jpg")
             
         } else if(item.known_for_department != nil) {
             //Case Actor
-            cell.typeLabel.text = "Person"
+//            cell.typeLabel.text = "Person"
             cell.titleLabel.text = item.name
+            cell.imageView.image = UIImage(named: "person_default.jpg")
             
         } else {
             //Case Show
-            cell.typeLabel.text = "Show"
+//            cell.typeLabel.text = "Show"
             cell.titleLabel.text = item.name
-            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
+            cell.ratingLabel.text = "Avg. Rating: \(String(item.vote_average!))"
+            cell.imageView.image = UIImage(named: "movie_default.jpg")
             
         }
     }
