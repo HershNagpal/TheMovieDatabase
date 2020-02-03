@@ -11,14 +11,17 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
+    // The TVItem which has the information to show in the detail view
     private let item: TVItem
     
+    // The detail view which displays the details of the TVItem
     let detailView:DetailView = {
         let detailView = DetailView()
         detailView.translatesAutoresizingMaskIntoConstraints = false
         return detailView
     }()
     
+    // The background view
     let backgroundView:UIView = {
         let view = UIView()
         view.backgroundColor = blue
@@ -41,6 +44,9 @@ class DetailViewController: UIViewController {
         createElementsAndConstraints()
     }
     
+    /**
+     Adds all elements to the subview and calls constraining helper methods.
+     */
     func createElementsAndConstraints() {
         view.addSubview(backgroundView)
         view.addSubview(detailView)
@@ -49,6 +55,9 @@ class DetailViewController: UIViewController {
         backgroundViewConstraints()
     }
     
+    /**
+      Sets up constraints for the whole detail view
+    */
     func detailViewConstraints() {
         NSLayoutConstraint.activate([
             detailView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
@@ -58,6 +67,9 @@ class DetailViewController: UIViewController {
         ])
     }
     
+    /**
+      Sets up constraints for the background view
+    */
     func backgroundViewConstraints() {
         NSLayoutConstraint.activate([
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),

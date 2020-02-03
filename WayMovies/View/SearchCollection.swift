@@ -100,6 +100,7 @@ class SearchCollection: UIView, UICollectionViewDelegateFlowLayout {
     
     /**
      Applies the results of a search to this collection
+     `Parameter searchItems: the list of TVItems retrieved from the API search`
      */
     func applySearch(searchItems:[TVItem]) {
         self.searchItems = searchItems

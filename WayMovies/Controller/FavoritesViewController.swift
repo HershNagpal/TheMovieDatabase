@@ -11,14 +11,14 @@ import UIKit
 
 class FavoritesViewController: UIViewController {
     
-    let searchBarHeight:CGFloat = 30
-    
+    // The collection that displays the user's favorited movies, shows, and actors
     private var favoritesCollection:FavoritesCollection = {
         let collection = FavoritesCollection()
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
     
+    // The background of the view
     let backgroundView:UIView = {
         let view = UIView()
         view.backgroundColor = blue
@@ -39,17 +39,26 @@ class FavoritesViewController: UIViewController {
         setUpDelegates()
     }
     
+    /**
+     Sets delegates
+     */
     func setUpDelegates() {
         favoritesCollection.navDelegate = self
     }
     
+    /**
+     Adds all elements to the subview and calls constraining helper methods.
+     */
     func createElementsAndConstraints() {
         view.addSubview(backgroundView)
         view.addSubview(favoritesCollection)
         backgroundViewConstraints()
-        searchCollectionConstraints()
+        favoritesCollectionConstraints()
     }
     
+    /**
+      Sets up constraints for the background view
+    */
     func backgroundViewConstraints() {
         NSLayoutConstraint.activate([
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -59,7 +68,10 @@ class FavoritesViewController: UIViewController {
         ])
     }
     
-    func searchCollectionConstraints() {
+    /**
+      Sets up constraints for the FavoritesCollection
+    */
+    func favoritesCollectionConstraints() {
         NSLayoutConstraint.activate([
             favoritesCollection.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
             favoritesCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor),

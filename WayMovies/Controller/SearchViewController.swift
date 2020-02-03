@@ -11,15 +11,23 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    let searchBarHeight:CGFloat = 40
+    // The height of the search bar at the top of the screen
+    private let searchBarHeight:CGFloat = 40
     
+    // The list of search items retreived from the API
+    private var searchItems = [TVItem]()
+    
+    
+    // The collection which displays the list of search items
     private var searchCollection:SearchCollection = {
         let collection = SearchCollection()
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
     
-    let suggestionTable:UITableView = {
+    
+    // The table which displays categorized search suggestions
+    private let suggestionTable:UITableView = {
         let table = UITableView()
         table.rowHeight = 40
         table.separatorStyle = .singleLine
@@ -30,14 +38,16 @@ class SearchViewController: UIViewController {
         return table
     }()
     
-    let backgroundView:UIView = {
+    // The background of the view
+    private let backgroundView:UIView = {
         let view = UIView()
         view.backgroundColor = blue
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    let searchBar:UISearchBar = {
+    // The search bar on top of the screen under the navigation bar
+    private let searchBar:UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.searchBarStyle = .minimal
         searchBar.backgroundColor = .clear
@@ -50,9 +60,8 @@ class SearchViewController: UIViewController {
         return searchBar
     }()
     
-    private var searchItems = [TVItem]()
-    
-    func setUpNavBar() {
+    // The navigation bar on top of the screen
+    private func setUpNavBar() {
         self.navigationController!.navigationBar.barStyle = .black
         self.navigationController!.navigationBar.isTranslucent = true
         self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: green]
@@ -79,7 +88,10 @@ class SearchViewController: UIViewController {
         setUpDelegates()
     }
     
-    func setUpDelegates() {
+    /**
+     Sets delegates
+     */
+    private func setUpDelegates() {
         searchBar.delegate = self
         searchCollection.navDelegate = self
         suggestionTable.delegate = self
@@ -87,7 +99,10 @@ class SearchViewController: UIViewController {
         suggestionTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
-    func createElementsAndConstraints() {
+    /**
+     Adds all elements to the subview and calls constraining helper methods.
+     */
+    private func createElementsAndConstraints() {
         view.addSubview(backgroundView)
         view.addSubview(searchBar)
         view.addSubview(searchCollection)
@@ -99,7 +114,10 @@ class SearchViewController: UIViewController {
         suggestionTableConstraints()
     }
     
-    func searchCollectionConstraints() {
+    /**
+      Sets up constraints for the collection
+    */
+    private func searchCollectionConstraints() {
         NSLayoutConstraint.activate([
             searchCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             searchCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -108,7 +126,10 @@ class SearchViewController: UIViewController {
         ])
     }
     
-    func backgroundViewConstraints() {
+    /**
+      Sets up constraints for the background view
+    */
+    private func backgroundViewConstraints() {
         NSLayoutConstraint.activate([
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -117,7 +138,10 @@ class SearchViewController: UIViewController {
         ])
     }
     
-    func searchBarConstraints() {
+    /**
+      Sets up constraints for the search bar
+    */
+    private func searchBarConstraints() {
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
             searchBar.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -126,7 +150,10 @@ class SearchViewController: UIViewController {
         ])
     }
     
-    func suggestionTableConstraints() {
+    /**
+      Sets up constraints for the background view
+    */
+    private func suggestionTableConstraints() {
         NSLayoutConstraint.activate([
             suggestionTable.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             suggestionTable.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -135,6 +162,10 @@ class SearchViewController: UIViewController {
         ])
     }
     
+    /**
+     Applies the results of the search call to the collection within this view
+     `Parameter searchItems: The list of items retrieved from the API search`
+     */
     func applySearch(searchItems: [TVItem]) {
         self.searchItems = searchItems
         searchCollection.applySearch(searchItems: searchItems)

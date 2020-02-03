@@ -11,10 +11,16 @@ import Foundation
 import UIKit
 
 class DetailView: UIView {
+    // The height of the main poster image
     private let imageHeight:CGFloat = 630
+    
+    // The height of labels in the page
     private let labelHeight:CGFloat = 40
+    
+    // The width of labels in the page
     private let labelWidth:CGFloat = 170
     
+    // The view showing the poster image
     let imageView:UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -24,17 +30,20 @@ class DetailView: UIView {
         return image
     }()
 
+    // The label showing the description of the item in the detail page
     let descriptionLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
+        // Filler text
         label.text = "ads i;fl vdksjf; lkad s kfl ;advs kjlfj l;sf; ;slda kjf;ls adkj f;lads kjf;alsd kf ;lka ds; lkf ja sd klfj ads;lkf jas ;lkfj ds; lkjfs; dkljf a;kljf ;als dkj f;l ksd jfl ;akds f;k las jfl;ka s djf;l akds jf;lk adsf"
         label.numberOfLines = 0
         label.sizeToFit()
         return label
     }()
     
+    // The label showing the title of the movie or show or the name of the actor
     let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
@@ -43,6 +52,7 @@ class DetailView: UIView {
         return label
     }()
     
+    // The label showing whether the item is a show, movie, or actor
     let typeLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -55,6 +65,7 @@ class DetailView: UIView {
         return label
     }()
     
+    // The label showing the average rating of the show or movie
     let ratingLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -64,12 +75,19 @@ class DetailView: UIView {
         return label
     }()
     
+    /**
+     
+     */
     func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
         Request.getImage(searchTerms: searchTerms) { result in
             completion(result)
         }
     }
     
+    /**
+     Sets the details of the page based on the given item
+     `Parameter item: The item which contains the information needed to show on the page`
+     */
     func setDetails(item:TVItem) {
         if(item.title != nil) {
             //Case Movie

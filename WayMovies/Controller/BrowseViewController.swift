@@ -10,11 +10,15 @@ import UIKit
 
 class BrowseViewController: UIViewController {
 
+    // Height of the search bar
     private let searchBarHeight:CGFloat = 40
+    
+    // Height of each collection in the scroll view
     private let collectionHeight:CGFloat = 250
     
 //    var refreshControl = UIRefreshControl()
     
+    // The scrolling view of all the collection views on the screen
     let scrollView:UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -22,6 +26,7 @@ class BrowseViewController: UIViewController {
         return scrollView
     }()
     
+    // The table which displays categorized search suggestions
     let suggestionTable:UITableView = {
         let table = UITableView()
         table.rowHeight = 40
@@ -33,6 +38,7 @@ class BrowseViewController: UIViewController {
         return table
     }()
     
+    // The list of TVCollections, each which displays a different group of related TVItems
     let collectionList:[TVCollection] = [
         {
             let collection = TVCollection(type: CollectionType.UpcomingMovies)
@@ -67,6 +73,7 @@ class BrowseViewController: UIViewController {
         
     ]
     
+    // The black background view
     let backgroundView:UIView = {
         let view = UIView()
         view.backgroundColor = blue
@@ -74,6 +81,7 @@ class BrowseViewController: UIViewController {
         return view
     }()
     
+    // The search bar at the top of the screen under the navigation bar
     let searchBar:UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.searchBarStyle = .minimal
@@ -86,21 +94,22 @@ class BrowseViewController: UIViewController {
         return searchBar
     }()
     
+    // The favorites button in the navigation bar
     let favoriteButton:UIBarButtonItem = {
         let button = UIBarButtonItem()
         button.title = "Favorites"
         return button
     }()
     
+    /**
+     Sets up the navigation bar at the top of the screen
+     */
     func setUpNavBar() {
         self.navigationController!.navigationBar.barStyle = .black
         self.navigationController!.navigationBar.isTranslucent = true
         self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: green]
         self.navigationController!.navigationBar.tintColor = green
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Favorites", style: .done, target: self, action: #selector(viewFavorites))
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
     }
     
     override func loadView() {
@@ -121,11 +130,15 @@ class BrowseViewController: UIViewController {
         createElementsAndConstraints()
     }
     
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrollView.contentSize = calculateHeight()
     }
     
+    /**
+     Sets up delegates
+     */
     func setUpDelegates() {
         searchBar.delegate = self
         for collection in collectionList {
@@ -136,12 +149,18 @@ class BrowseViewController: UIViewController {
         suggestionTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
+    /**
+     Calculates the heights of of the scrollview necessary to contain all of the collections
+     */
     func calculateHeight() -> CGSize {
         let width = Int(view.frame.width)
         let height = Int(collectionHeight)*collectionList.count + Int(searchBarHeight)
         return CGSize(width: width, height: height)
     }
     
+    /**
+     Adds all elements to the subview and calls constraining helper methods.
+     */
     func createElementsAndConstraints() {
         view.addSubview(backgroundView)
         view.addSubview(searchBar)
@@ -156,6 +175,9 @@ class BrowseViewController: UIViewController {
         suggestionTableConstraints()
     }
     
+    /**
+      Sets up constraints for the scroll view
+    */
     func scrollViewConstraints() {
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
@@ -165,6 +187,9 @@ class BrowseViewController: UIViewController {
         ])
     }
     
+    /**
+      Sets up constraints for the background view
+    */
     func backgroundViewConstraints() {
         NSLayoutConstraint.activate([
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -174,6 +199,9 @@ class BrowseViewController: UIViewController {
         ])
     }
     
+    /**
+      Sets up constraints for the search bar
+    */
     func searchBarConstraints() {
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
@@ -183,8 +211,10 @@ class BrowseViewController: UIViewController {
         ])
     }
     
+    /**
+      Sets up constraints for the suggestion table
+    */
     func suggestionTableConstraints() {
-        
         NSLayoutConstraint.activate([
             suggestionTable.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             suggestionTable.leftAnchor.constraint(equalTo: view.leftAnchor),

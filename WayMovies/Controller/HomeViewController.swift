@@ -8,6 +8,7 @@
 
 import UIKit
 
+// Colors used in the color scheme of the app
 let gray:UIColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.7)
 let red:UIColor = UIColor(red: 0.7, green: 0.05, blue: 0.05, alpha: 0.9)
 let green:UIColor = UIColor(red: 1/256, green: 210/256, blue: 119/256, alpha: 1.0)
@@ -15,12 +16,17 @@ let translucent_green:UIColor = UIColor(red: 1/256, green: 210/256, blue: 119/25
 let blue:UIColor = UIColor(red: 8/256, green: 28/256, blue: 36/256, alpha: 1.0)
 
 class HomeViewController: UIViewController {
+    // The distance that elements on the page move up when the search bar is selected
+    private let moveUpHeight:CGFloat = 100
     
-    let moveUpHeight:CGFloat = 100
-    let logoHeight:CGFloat = 150
-    let logoWidth:CGFloat = 170
+    // The height of the app logo
+    private let logoHeight:CGFloat = 150
     
-    let backgroundImage:UIImageView = {
+    // The width of the app logo
+    private let logoWidth:CGFloat = 170
+    
+    // The background image on the home screen
+    private let backgroundImage:UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
@@ -30,14 +36,16 @@ class HomeViewController: UIViewController {
         return image
     }()
     
-    let blur:UIVisualEffectView = {
+    // The blur effect applied when the search bar is selected
+    private let blur:UIVisualEffectView = {
         let blur = UIBlurEffect(style: UIBlurEffect.Style.dark)
         let blurEffect = UIVisualEffectView(effect: blur)
         blurEffect.translatesAutoresizingMaskIntoConstraints = false
         return blurEffect
     } ()
     
-    let searchBar:UISearchBar = {
+    // The search bar in the center of the home screen
+    private let searchBar:UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.searchBarStyle = .minimal
         searchBar.backgroundColor = .clear
@@ -49,7 +57,8 @@ class HomeViewController: UIViewController {
         return searchBar
     }()
     
-    let homeLogo:UIImageView = {
+    // The logo on the home screen
+    private let homeLogo:UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
@@ -59,7 +68,8 @@ class HomeViewController: UIViewController {
         return image
     }()
     
-    let browseButton:UIButton = {
+    // The button that navigates to the browse screen
+    private let browseButton:UIButton = {
         let button = UIButton()
         button.backgroundColor = translucent_green
         button.layer.cornerRadius = 10
@@ -79,7 +89,10 @@ class HomeViewController: UIViewController {
         createElementsAndConstraints()
     }
     
-    func createElementsAndConstraints() {
+    /**
+     Adds all elements to the subview and calls constraining helper methods.
+     */
+    private func createElementsAndConstraints() {
         view.addSubview(backgroundImage)
         view.addSubview(blur)
         view.addSubview(searchBar)
@@ -93,7 +106,10 @@ class HomeViewController: UIViewController {
         blur.isHidden = true
     }
     
-    func backgroundImageConstraints() {
+    /**
+      Sets up constraints for the FavoritesCollection
+    */
+    private func backgroundImageConstraints() {
         NSLayoutConstraint.activate([
             backgroundImage.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImage.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -102,7 +118,10 @@ class HomeViewController: UIViewController {
         ])
     }
     
-    func blurConstraints() {
+    /**
+      Sets up constraints for the blur effect
+    */
+    private func blurConstraints() {
         NSLayoutConstraint.activate([
             blur.topAnchor.constraint(equalTo: view.topAnchor),
             blur.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -111,7 +130,10 @@ class HomeViewController: UIViewController {
         ])
     }
     
-    func searchBarConstraints() {
+    /**
+      Sets up constraints for the search bar
+    */
+    private func searchBarConstraints() {
         NSLayoutConstraint.activate([
             searchBar.centerYAnchor.constraint(equalTo: view.layoutMarginsGuide.centerYAnchor),
             searchBar.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
@@ -120,7 +142,10 @@ class HomeViewController: UIViewController {
         ])
     }
     
-    func homeLogoConstraints() {
+    /**
+      Sets up constraints for the logo view
+    */
+    private func homeLogoConstraints() {
         NSLayoutConstraint.activate([
             homeLogo.bottomAnchor.constraint(equalTo: searchBar.topAnchor, constant: -100),
             homeLogo.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
@@ -129,7 +154,10 @@ class HomeViewController: UIViewController {
         ])
     }
     
-    func browseButtonConstraints() {
+    /**
+      Sets up constraints for the browse butotn
+    */
+    private func browseButtonConstraints() {
         NSLayoutConstraint.activate([
             browseButton.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 20),
             browseButton.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
@@ -145,19 +173,28 @@ class HomeViewController: UIViewController {
         navigationController?.pushViewController(BrowseViewController(), animated: true)
     }
     
-    func fadeInBlur() {
+    /**
+     Fades in the blur effect over 0.5 seconds
+     */
+    private func fadeInBlur() {
         UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveLinear, animations: {
             self.blur.alpha = 1.0
         }, completion: nil)
     }
 
-    func fadeOutBlur() {
+    /**
+     Fades out the blur effect over 0.5 seconds
+     */
+    private func fadeOutBlur() {
         UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveLinear, animations: {
             self.blur.alpha = 0.0
         }, completion: nil)
     }
     
-    func moveElementsUp() {
+    /**
+     Animates the elements on the screen moving upwards
+     */
+    private func moveElementsUp() {
         UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
             self.searchBar.frame.origin.y -= self.moveUpHeight
             self.homeLogo.frame.origin.y -= (self.moveUpHeight-40)
@@ -165,7 +202,10 @@ class HomeViewController: UIViewController {
         }, completion: nil)
     }
     
-    func moveElementsDown() {
+    /**
+     Animates the elements on the screen moving downwards
+     */
+    private func moveElementsDown() {
         UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
             self.searchBar.frame.origin.y += self.moveUpHeight
             self.homeLogo.frame.origin.y += (self.moveUpHeight-40)

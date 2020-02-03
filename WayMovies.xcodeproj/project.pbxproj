@@ -118,7 +118,6 @@
 				0DEFDD0623E1DD31008A73DA /* FavoritesViewController.swift */,
 				0D23E88A23DF51D20014D6E1 /* SearchViewController.swift */,
 				0DB4B56F23D8ED3100C3DC78 /* DetailViewController.swift */,
-				0DF8A1F123E082C30092DFA1 /* DetailView.swift */,
 				0DD9E86A23DB7647009191D7 /* BrowseViewController.swift */,
 				0DF8A1F723E0D0070092DFA1 /* NavigationDelegate.swift */,
 			);
@@ -128,6 +127,7 @@
 		0DF8A1FB23E0DA960092DFA1 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				0DF8A1F123E082C30092DFA1 /* DetailView.swift */,
 				0D20AF2A23D6319D00D8090B /* TVCell.swift */,
 				0DD9E86823DB57CD009191D7 /* TVCollection.swift */,
 				0D23E88823DF37C20014D6E1 /* SearchCollection.swift */,
