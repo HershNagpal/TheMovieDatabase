@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ Structure of the object where TV show, movie, or actor information is stored for display
+ */
 struct TVItem: Decodable {
     var id: Int
     var vote_average: Double?
@@ -20,6 +23,9 @@ struct TVItem: Decodable {
     var media_type: String?
 }
 
+/**
+ Top level structure of the JSON response given by TMDB api
+ */
 struct Response: Decodable {
     var total_results: Int
     var total_pages: Int

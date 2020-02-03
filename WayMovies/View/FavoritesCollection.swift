@@ -76,7 +76,8 @@ class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
     }
     
     /**
-     
+     Removes the given TVItem from the list of the user's favorites
+     `Parameter item: The TVItem to remove from favorites`
      */
     static func removeFromFavorites(item:TVItem) {
         favoritesMap.removeValue(forKey: item.id)
@@ -91,6 +92,7 @@ class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
     
     /**
      Adds a TVItem to the list of favorites
+     `Parameter item: The TVItem to add to favorites`
      */
     static func addToFavorites(item:TVItem) {
         favoritesMap[item.id] = item
@@ -98,8 +100,9 @@ class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
     
     /**
      Calls the API retrieval of the poster image of a TVItem in the Request class and returns the image location when escaping
+     `Parameter searchTerms: The search string given by the user`
      */
-    func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
+    private func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
             Request.getImage(searchTerms: searchTerms) { result in
             completion(result)
         }
@@ -111,8 +114,10 @@ class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
     
     /**
      Applies the image retrieved using the getImage method to the cell
+     `Parameter: cell: the cell to apply the image to`
+     `Parameter: item: the item which holds the information needed to retreive the image`
      */
-    func getCellImage (cell: TVCell, item: TVItem) {
+    private func getCellImage (cell: TVCell, item: TVItem) {
         if item.poster_path != "" && item.poster_path != nil {
             getImage(searchTerms: item.poster_path!) { (result) in
                 switch result {
@@ -142,8 +147,10 @@ class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
     
     /**
      Sets all attributes of the cells in the collection to their defaults
+     `Parameter cell: the cell to set defaults`
+     `Parameter item: the cell which holds the information to set in the cell`
      */
-    func setCellDefaults(cell: TVCell, item: TVItem) {
+    private func setCellDefaults(cell: TVCell, item: TVItem) {
         cell.setItem(item: item)
         cell.backgroundColor = .white
         cell.layer.cornerRadius = 5
