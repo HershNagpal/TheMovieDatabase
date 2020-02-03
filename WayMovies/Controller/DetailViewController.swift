@@ -15,14 +15,14 @@ class DetailViewController: UIViewController {
     private let item: TVItem
     
     // The detail view which displays the details of the TVItem
-    let detailView:DetailView = {
+    private let detailView:DetailView = {
         let detailView = DetailView()
         detailView.translatesAutoresizingMaskIntoConstraints = false
         return detailView
     }()
     
     // The background view
-    let backgroundView:UIView = {
+    private let backgroundView:UIView = {
         let view = UIView()
         view.backgroundColor = blue
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -47,7 +47,7 @@ class DetailViewController: UIViewController {
     /**
      Adds all elements to the subview and calls constraining helper methods.
      */
-    func createElementsAndConstraints() {
+    private func createElementsAndConstraints() {
         view.addSubview(backgroundView)
         view.addSubview(detailView)
         detailView.setDetails(item: item)
@@ -58,7 +58,7 @@ class DetailViewController: UIViewController {
     /**
       Sets up constraints for the whole detail view
     */
-    func detailViewConstraints() {
+    private func detailViewConstraints() {
         NSLayoutConstraint.activate([
             detailView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
             detailView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -70,7 +70,7 @@ class DetailViewController: UIViewController {
     /**
       Sets up constraints for the background view
     */
-    func backgroundViewConstraints() {
+    private func backgroundViewConstraints() {
         NSLayoutConstraint.activate([
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
