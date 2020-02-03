@@ -8,6 +8,9 @@
 
 import Foundation
 
+/**
+ Defines the types of collections that can be displayed in the BrowseView
+ */
 enum CollectionType {
     case TopRatedMovies, UpcomingMovies, PopularMovies, PopularShows, TopRatedShows, PopularPeople
 }

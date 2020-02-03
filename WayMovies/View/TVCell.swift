@@ -15,7 +15,7 @@ import UIKit
 class TVCell: UICollectionViewCell {
     
     // The TVItem associated with this TVCell
-    private var item:TVItem?
+    private var item:TVItem = TVItem(id: 0)
     
     // The height of all labels on the TVCell
     private let labelHeight:CGFloat = 50
@@ -41,9 +41,7 @@ class TVCell: UICollectionViewCell {
         }
     }
     
-    /**
-     Shows the image of the movie, show, or person associated with the TVItem this TVCell represents.
-     */
+    // Shows the image of the movie, show, or person associated with the TVItem this TVCell represents.
     let imageView: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -54,9 +52,8 @@ class TVCell: UICollectionViewCell {
         return image
     }()
     
-    /**
-    Shows the image of the movie, show, or person associated with the TVItem this TVCell represents.
-    */
+    
+    // Shows the image of the movie, show, or person associated with the TVItem this TVCell represents.
     var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -67,9 +64,8 @@ class TVCell: UICollectionViewCell {
         return label
     }()
     
-    /**
-    Shows whether this TVCell represents a Show, Movie, or Person.
-    */
+    
+    // Shows whether this TVCell represents a Show, Movie, or Person.
     var typeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -80,9 +76,8 @@ class TVCell: UICollectionViewCell {
         return label
     }()
     
-    /**
-    Shows the rating of the movie, show associated with the TVItem this TVCell represents. Empty if representing a Person.
-    */
+    
+    // Shows the rating of the movie, show associated with the TVItem this TVCell represents. Empty if representing a Person.
     var ratingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -93,9 +88,8 @@ class TVCell: UICollectionViewCell {
         return label
     }()
     
-    /**
-    Shows a filled in heart if this TVCell represents a favorited TVItem; otherwise is empty.
-    */
+    
+    // Shows a filled in heart if this TVCell represents a favorited TVItem; otherwise is empty.
     lazy var favoriteButton: UIButton = {
         let button = UIButton()
 //        button.backgroundColor = .magenta
@@ -107,9 +101,8 @@ class TVCell: UICollectionViewCell {
         return button
     }()
     
-    /**
-     Adds all elementts to the subview and calls constraining helper methods.
-     */
+    
+    // Adds all elementts to the subview and calls constraining helper methods.
     private func createElementsAndConstraints() {
         addSubview(imageView)
         addSubview(titleLabel)
@@ -196,10 +189,10 @@ class TVCell: UICollectionViewCell {
      Adds or removes the this TVCell's item from the global favorites list when the favorite button is clicked.
      */
     @objc private func favoriteButtonClicked() {
-        if(!favoriteButton.isSelected) {
-            FavoritesCollection.addToFavorites(item: item!)
+        if(FavoritesCollection.isInFavorites(item: item)) {
+            FavoritesCollection.addToFavorites(item: item)
         } else {
-            FavoritesCollection.removeFromFavorites(item: item!)
+            FavoritesCollection.removeFromFavorites(item: item)
         }
         favoriteButton.isSelected = !favoriteButton.isSelected
     }

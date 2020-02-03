@@ -13,13 +13,22 @@ var favoritesMap = [Int:TVItem]()
 
 class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
         
+    // Delegate which manages navigation to the details page of each cell
     var navDelegate:NavigationDelegate?
     
-    let searchCellID:String = "CellID"
-    let cellHeight:CGFloat = 300
-    let cellWidth:CGFloat = 200
-    let cellInsetSize:CGFloat = 1
+    // Cell reuse ID
+    private let searchCellID:String = "CellID"
     
+    // The height of each cell in the collection
+    private let cellHeight:CGFloat = 300
+    
+    // The width of each cell in the collection
+    private let cellWidth:CGFloat = 200
+    
+    // The size of the insets around each cell
+    private let cellInsetSize:CGFloat = 1
+    
+    // The collection that displays the user's favorite movies
     let favoritesCollection:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: CGRect(x:0, y:0, width:0, height:0), collectionViewLayout: layout)
@@ -37,18 +46,27 @@ class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
         createElementsAndConstraints()
     }
     
-    func createElementsAndConstraints() {
+    /**
+     Adds all elements to the subview and calls constraining helper methods.
+     */
+    private func createElementsAndConstraints() {
         addSubview(favoritesCollection)
         favoritesCollectionConstraints()
     }
     
-    func registerCollectionCellsAndDelegates() {
+    /**
+     Sets delegates and registers cell reuse ID's
+     */
+    private func registerCollectionCellsAndDelegates() {
         favoritesCollection.delegate = self
         favoritesCollection.dataSource = self
         favoritesCollection.register(TVCell.self, forCellWithReuseIdentifier: searchCellID)
     }
     
-    func favoritesCollectionConstraints() {
+    /**
+     Sets up constraints for the FavoritesCollection
+     */
+    private func favoritesCollectionConstraints() {
         NSLayoutConstraint.activate([
             favoritesCollection.topAnchor.constraint(equalTo: self.topAnchor),
             favoritesCollection.leftAnchor.constraint(equalTo: self.leftAnchor),
@@ -57,6 +75,9 @@ class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
         ])
     }
     
+    /**
+     
+     */
     static func removeFromFavorites(item:TVItem) {
         favoritesMap.removeValue(forKey: item.id)
     }
@@ -68,10 +89,16 @@ class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
         return false
     }
     
+    /**
+     Adds a TVItem to the list of favorites
+     */
     static func addToFavorites(item:TVItem) {
         favoritesMap[item.id] = item
     }
     
+    /**
+     Calls the API retrieval of the poster image of a TVItem in the Request class and returns the image location when escaping
+     */
     func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
             Request.getImage(searchTerms: searchTerms) { result in
             completion(result)
@@ -81,34 +108,10 @@ class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-extension FavoritesCollection: UICollectionViewDataSource, UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return favoritesMap.count
-    }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: searchCellID, for: indexPath) as! TVCell
-        let item = Array(favoritesMap.values)[indexPath.row]
-        setCellDefaults(cell: cell, item: item)
-        getCellImage(cell: cell, item: item)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: cellWidth, height: cellHeight)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: cellInsetSize, left: cellInsetSize, bottom: cellInsetSize, right: cellInsetSize)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item:TVItem = Array(favoritesMap.values)[indexPath.row]
-        navDelegate?.cellTapped(item)
-    }
-    
+    /**
+     Applies the image retrieved using the getImage method to the cell
+     */
     func getCellImage (cell: TVCell, item: TVItem) {
         if item.poster_path != "" && item.poster_path != nil {
             getImage(searchTerms: item.poster_path!) { (result) in
@@ -137,6 +140,9 @@ extension FavoritesCollection: UICollectionViewDataSource, UICollectionViewDeleg
         }
     }
     
+    /**
+     Sets all attributes of the cells in the collection to their defaults
+     */
     func setCellDefaults(cell: TVCell, item: TVItem) {
         cell.setItem(item: item)
         cell.backgroundColor = .white
@@ -161,4 +167,48 @@ extension FavoritesCollection: UICollectionViewDataSource, UICollectionViewDeleg
             
         }
     }
+}
+
+extension FavoritesCollection: UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    /**
+     Returns the total number of cells in the collection
+     */
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return favoritesMap.count
+    }
+    
+    /**
+     Returns a cell with the information of a specifc index of the list of TVItems to display in this collection
+     */
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: searchCellID, for: indexPath) as! TVCell
+        let item = Array(favoritesMap.values)[indexPath.row]
+        setCellDefaults(cell: cell, item: item)
+        getCellImage(cell: cell, item: item)
+        return cell
+    }
+    
+    /**
+     Returns the dimensions of the cell
+     */
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: cellWidth, height: cellHeight)
+    }
+    
+    /**
+     Returns the size of the insets around each cell
+     */
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: cellInsetSize, left: cellInsetSize, bottom: cellInsetSize, right: cellInsetSize)
+    }
+    
+    /**
+     Navigates to the details page of the TVItem represented by this cell when it is tapped
+     */
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item:TVItem = Array(favoritesMap.values)[indexPath.row]
+        navDelegate?.cellTapped(item)
+    }
+
 }

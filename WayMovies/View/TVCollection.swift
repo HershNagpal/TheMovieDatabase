@@ -41,9 +41,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     // The NavigationDelegate which allows
     var navDelegate:NavigationDelegate?
     
-    /**
-     The CollectionView that shows all of the TVItems as TVCells
-     */
+    //The CollectionView that shows all of the TVItems in the TVList
     let TVCollection:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: CGRect(x:0, y:0, width:0, height:0), collectionViewLayout: layout)
@@ -54,9 +52,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
         return collection
     }()
     
-    /**
-     Shows the group of movies being displayed by the collection
-     */
+    // Shows the group of movies being displayed by the collection
     let TVCollectionLabel:UILabel = {
         let label = UILabel()
         label.text = ""

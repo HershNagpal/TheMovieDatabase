@@ -13,6 +13,8 @@ class BrowseViewController: UIViewController {
     private let searchBarHeight:CGFloat = 40
     private let collectionHeight:CGFloat = 250
     
+//    var refreshControl = UIRefreshControl()
+    
     let scrollView:UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -109,6 +111,12 @@ class BrowseViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//
+//        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+//        refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
+//        refreshControl.tintColor = green
+//        scrollView.addSubview(refreshControl)
+        
         setUpDelegates()
         createElementsAndConstraints()
     }
@@ -209,6 +217,13 @@ class BrowseViewController: UIViewController {
     @objc func viewFavorites(sender: UIBarButtonItem) {
         navigationController?.pushViewController(FavoritesViewController(), animated: true)
     }
+    
+//    @objc func refresh() {
+//        for collection in collectionList {
+//            collection.TVCollection.reloadData()
+//        }
+//        refreshControl.endRefreshing()
+//    }
     
 }
 

@@ -11,7 +11,7 @@ import UIKit
 
 class SearchCollection: UIView, UICollectionViewDelegateFlowLayout {
     
-    
+    // List of items retrieved from API call
     private var searchItems = [TVItem]() {
         didSet {
             DispatchQueue.main.async {
@@ -20,13 +20,22 @@ class SearchCollection: UIView, UICollectionViewDelegateFlowLayout {
         }
     }
     
+    // Delegate that manages navigation to the details page of each cell
     var navDelegate:NavigationDelegate?
     
-    let searchCellID:String = "CellID"
-    let cellHeight:CGFloat = 300
-    let cellWidth:CGFloat = 200
-    let cellInsetSize:CGFloat = 1
+    // Cell reuse ID
+    private let searchCellID:String = "CellID"
     
+    // The height of each cell in the collection
+    private let cellHeight:CGFloat = 300
+    
+    // The width of each cell in the collection
+    private let cellWidth:CGFloat = 200
+    
+    // The size of the margins around each cell
+    private let cellInsetSize:CGFloat = 1
+    
+    // The CollectionView that shows all of the results of the search
     let searchCollection:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: CGRect(x:0, y:0, width:0, height:0), collectionViewLayout: layout)
@@ -51,18 +60,27 @@ class SearchCollection: UIView, UICollectionViewDelegateFlowLayout {
         createElementsAndConstraints()
     }
     
-    func createElementsAndConstraints() {
+    /**
+     Adds all elements to the subview and calls constraining helper methods.
+     */
+    private func createElementsAndConstraints() {
         addSubview(searchCollection)
         searchCollectionConstraints()
     }
     
-    func registerCollectionCellsAndDelegates() {
+    /**
+     Sets delegates and registers cell reuse ID's
+     */
+    private func registerCollectionCellsAndDelegates() {
         searchCollection.delegate = self
         searchCollection.dataSource = self
         searchCollection.register(TVCell.self, forCellWithReuseIdentifier: searchCellID)
     }
     
-    func searchCollectionConstraints() {
+    /**
+     Sets up constraints for the SearchCollection
+     */
+    private func searchCollectionConstraints() {
         NSLayoutConstraint.activate([
             searchCollection.topAnchor.constraint(equalTo: self.topAnchor),
             searchCollection.leftAnchor.constraint(equalTo: self.leftAnchor),
@@ -71,13 +89,18 @@ class SearchCollection: UIView, UICollectionViewDelegateFlowLayout {
         ])
     }
     
-    func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
+    /**
+     Calls a Request to the API with the search terms given by the user
+     */
+    private func getImage(searchTerms: String, completion: @escaping(Result<Data, Error>) -> Void) {
             Request.getImage(searchTerms: searchTerms) { result in
             completion(result)
         }
     }
     
-    
+    /**
+     Applies the results of a search to this collection
+     */
     func applySearch(searchItems:[TVItem]) {
         self.searchItems = searchItems
     }
@@ -85,35 +108,11 @@ class SearchCollection: UIView, UICollectionViewDelegateFlowLayout {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-extension SearchCollection: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return searchItems.count
-    }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: searchCellID, for: indexPath) as! TVCell
-        let item = searchItems[indexPath.row]
-        setCellDefaults(cell: cell, item: item)
-        getCellImage(cell: cell, item: item)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: cellWidth, height: cellHeight)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: cellInsetSize, left: cellInsetSize, bottom: cellInsetSize, right: cellInsetSize)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item:TVItem = searchItems[indexPath.row]
-        navDelegate?.cellTapped(item)
-    }
-    
-    func setCellDefaults(cell: TVCell, item: TVItem) {
+    /**
+     Sets all attributes of the cells in the collection to their defaults
+     */
+    private func setCellDefaults(cell: TVCell, item: TVItem) {
         cell.setItem(item: item)
         cell.backgroundColor = .white
         cell.layer.cornerRadius = 5
@@ -138,7 +137,10 @@ extension SearchCollection: UICollectionViewDelegate, UICollectionViewDataSource
         }
     }
     
-    func getCellImage (cell: TVCell, item: TVItem) {
+    /**
+     Applies the image retrieved using the getImage method to the cell
+     */
+    private func getCellImage (cell: TVCell, item: TVItem) {
             if item.poster_path != "" && item.poster_path != nil {
                 getImage(searchTerms: item.poster_path!) { (result) in
                     switch result {
@@ -165,4 +167,47 @@ extension SearchCollection: UICollectionViewDelegate, UICollectionViewDataSource
                 }
             }
         }
+}
+
+extension SearchCollection: UICollectionViewDelegate, UICollectionViewDataSource {
+    /**
+     Returns the total number of cells
+     */
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return searchItems.count
+    }
+    
+    /**
+     Returns a cell with the information of a specifc index of the list of TVItems to display in this collection
+     */
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: searchCellID, for: indexPath) as! TVCell
+        let item = searchItems[indexPath.row]
+        setCellDefaults(cell: cell, item: item)
+        getCellImage(cell: cell, item: item)
+        return cell
+    }
+    
+    /**
+     Returns the dimensions of the cell
+     */
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: cellWidth, height: cellHeight)
+    }
+    
+    /**
+     Returns the size of the insets around each cell
+     */
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: cellInsetSize, left: cellInsetSize, bottom: cellInsetSize, right: cellInsetSize)
+    }
+    
+    /**
+     Navigates to the details page of the TVItem represented by this cell when it is tapped
+     */
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item:TVItem = searchItems[indexPath.row]
+        navDelegate?.cellTapped(item)
+    }
+
 }
