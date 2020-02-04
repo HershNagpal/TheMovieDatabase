@@ -298,28 +298,35 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
      Applies the image retrieved using the getImage method to the cell
      */
     private func getCellImage(cell: TVCell, item: TVItem) {
-        if item.poster_path != "" && item.poster_path != nil {
-            getImage(searchTerms: item.poster_path!) { (result) in
+        let tag = cell.tag
+        if let path = item.poster_path, !path.isEmpty {
+            getImage(searchTerms: path) { (result) in
                 switch result {
                     case .failure(let error):
                        print(error)
                     case .success(let data):
                         DispatchQueue.main.async {
-                            cell.imageView.image = UIImage(data: data)
-                            cell.titleLabel.text = ""
-                            cell.ratingLabel.text = ""
+                            if tag == cell.tag {
+                                cell.imageView.image = UIImage(data: data)
+                                cell.titleLabel.text = ""
+                                cell.ratingLabel.text = ""
+                        }
                     }
                 }
             }
-        } else if item.profile_path != "" && item.profile_path != nil {
-            getImage(searchTerms: item.profile_path!) { (result) in
+        } else if let path = item.profile_path, !path.isEmpty  {
+            let tag = cell.tag
+            getImage(searchTerms: path) { (result) in
                 switch result {
                     case .failure(let error):
                        print(error)
                     case .success(let data):
                         DispatchQueue.main.async {
-                            cell.imageView.image = UIImage(data: data)
-//                            cell.titleLabel.text = ""
+                            if tag == cell.tag {
+                                cell.imageView.image = UIImage(data: data)
+                                cell.titleLabel.text = ""
+                                cell.ratingLabel.text = ""
+                        }
                     }
                 }
             }
@@ -341,6 +348,7 @@ extension TVCollection: UICollectionViewDelegate, UICollectionViewDataSource {
      */
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
        let cell = TVCollection.dequeueReusableCell(withReuseIdentifier: TVCellID, for: indexPath) as! TVCell
+        cell.tag = indexPath.row
        let item = TVList[indexPath.row]
        setCellDefaults(cell: cell, item: item)
        getCellImage(cell: cell, item: item)

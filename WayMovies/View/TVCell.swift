@@ -51,7 +51,10 @@ class TVCell: UICollectionViewCell {
         return image
     }()
     
-    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+    }
     // Shows the image of the movie, show, or person associated with the TVItem this TVCell represents.
     var titleLabel: UILabel = {
         let label = UILabel()
