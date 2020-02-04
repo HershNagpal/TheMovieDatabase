@@ -63,7 +63,6 @@ class TVCell: UICollectionViewCell {
         return label
     }()
     
-    
     // Shows whether this TVCell represents a Show, Movie, or Person.
     var typeLabel: UILabel = {
         let label = UILabel()
@@ -74,7 +73,6 @@ class TVCell: UICollectionViewCell {
         label.sizeToFit()
         return label
     }()
-    
     
     // Shows the rating of the movie, show associated with the TVItem this TVCell represents. Empty if representing a Person.
     var ratingLabel: UILabel = {
@@ -87,7 +85,6 @@ class TVCell: UICollectionViewCell {
         return label
     }()
     
-    
     // Shows a filled in heart if this TVCell represents a favorited TVItem; otherwise is empty.
     lazy var favoriteButton: UIButton = {
         let button = UIButton()
@@ -99,7 +96,6 @@ class TVCell: UICollectionViewCell {
         
         return button
     }()
-    
     
     // Adds all elementts to the subview and calls constraining helper methods.
     private func createElementsAndConstraints() {
