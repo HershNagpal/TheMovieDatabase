@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 /**
  Each collection that displays any information about TVItems uses the TVCell to show information to the user.
  */

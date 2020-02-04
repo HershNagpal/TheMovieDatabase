@@ -181,12 +181,19 @@ class SearchViewController: UIViewController {
 }
 
 extension SearchViewController: NavigationDelegate {
+    /**
+     Called when the cell is tapped to navigate to the details page of the item
+     */
     func cellTapped(_ item: TVItem) {
         navigationController?.pushViewController(DetailViewController(item: item), animated: true)
     }
 }
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    /**
+     Searches TMDB based on the categorized search option selected
+     */
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if searchBar.text == "" {
             return
@@ -233,10 +240,16 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    /**
+     Returns the number of suggested categorized search options
+     */
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
     
+    /**
+     Returns a tableview cell with a suggested categorized search
+     */
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell")! //1.
         cell.backgroundColor = .white
@@ -255,7 +268,9 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension SearchViewController: UISearchBarDelegate {
-        
+    /**
+     Shows the categorized search suggestions when text is being edited and hides when editing stops
+     */
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText != "" {
             suggestionTable.reloadData()
@@ -265,10 +280,16 @@ extension SearchViewController: UISearchBarDelegate {
         }
     }
     
+    /**
+     Hides the suggestion table when the search cancel button is tapped
+     */
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         suggestionTable.isHidden = true
     }
     
+    /**
+     Searches the TMDB when the search button is clicked
+     */
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         Request.searchMulti(searchTerms: searchBar.text!) { [weak self] result in
         switch result {

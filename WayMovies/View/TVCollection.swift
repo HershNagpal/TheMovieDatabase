@@ -282,7 +282,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
             //Case Actor
 //            cell.typeLabel.text = "Person"
             cell.titleLabel.text = item.name
-            cell.imageView.image = UIImage(named: "person_default.jpg")
+            cell.imageView.image = UIImage(named: "profile_default.jpg")
             
         } else {
             //Case Show
