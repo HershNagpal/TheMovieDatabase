@@ -14,10 +14,17 @@ class RatingView: UIView {
     var starList:[UIImageView] = []
     
     // Width of each star
-    let starWidth:CGFloat = 40
+    private let starWidth:CGFloat = 40
     
     // Height of each star
-    let starHeight:CGFloat = 40
+    private let starHeight:CGFloat = 40
+    
+    /**
+     Returns the star height
+     */
+    func getStarHeight() -> CGFloat {
+        return starHeight
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,9 +43,17 @@ class RatingView: UIView {
     }
     
     /**
+     Calculates the width of the star rating based on the given TVItem
+     `Parameter item: The TVItem which holds the rating`
+     */
+    func calculateWidth(item:TVItem) -> CGFloat {
+        return CGFloat( ((item.vote_average!/10)*Double(Int(starWidth)*starList.count)) )
+    }
+    
+    /**
      Creates and constrains the rating stars
      */
-    private func createRatingStars() {
+    func createRatingStars() {
         
         for i in 0...4 {
             let star:UIImageView = {

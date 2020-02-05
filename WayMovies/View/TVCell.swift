@@ -51,10 +51,13 @@ class TVCell: UICollectionViewCell {
         return image
     }()
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        imageView.image = nil
-    }
+    let ratingView:RatingView = {
+        let ratingView = MiniRatingView()
+        ratingView.clipsToBounds = true
+        ratingView.translatesAutoresizingMaskIntoConstraints = false
+        return ratingView
+    }()
+    
     // Shows the image of the movie, show, or person associated with the TVItem this TVCell represents.
     var titleLabel: UILabel = {
         let label = UILabel()
@@ -77,17 +80,6 @@ class TVCell: UICollectionViewCell {
         return label
     }()
     
-    // Shows the rating of the movie, show associated with the TVItem this TVCell represents. Empty if representing a Person.
-    var ratingLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.textColor = .white
-        label.numberOfLines = 0
-        label.sizeToFit()
-        return label
-    }()
-    
     // Shows a filled in heart if this TVCell represents a favorited TVItem; otherwise is empty.
     lazy var favoriteButton: UIButton = {
         let button = UIButton()
@@ -99,29 +91,34 @@ class TVCell: UICollectionViewCell {
         
         return button
     }()
-    
-    // Adds all elementts to the subview and calls constraining helper methods.
+    /**
+     Adds all elements to the subview and calls constraining helper methods.
+     */
     private func createElementsAndConstraints() {
         addSubview(imageView)
         addSubview(titleLabel)
-        addSubview(ratingLabel)
         addSubview(typeLabel)
         addSubview(favoriteButton)
+        addSubview(ratingView)
         imageViewConstraints()
         titleLabelConstraints()
-        ratingLabelConstraints()
         typeLabelConstraints()
         favoriteButtonConstraints()
+        ratingViewConstraints()
     }
     
     override init(frame: CGRect) {
-//        self.item = item
         super.init(frame: frame)
         createElementsAndConstraints()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
     }
     
     /**
@@ -141,8 +138,8 @@ class TVCell: UICollectionViewCell {
      */
     private func titleLabelConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: ratingView.topAnchor),
+            titleLabel.leftAnchor.constraint(equalTo: self.leftAnchor),
             titleLabel.heightAnchor.constraint(equalToConstant: labelHeight),
             titleLabel.widthAnchor.constraint(equalToConstant: labelWidth)
             
@@ -160,6 +157,15 @@ class TVCell: UICollectionViewCell {
         ])
     }
     
+    func ratingViewConstraints() {
+            NSLayoutConstraint.activate([
+                ratingView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+                ratingView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 3),
+    //            ratingView.widthAnchor.constraint(equalToConstant: 500),
+                ratingView.heightAnchor.constraint(equalToConstant: ratingView.getStarHeight())
+            ])
+        }
+    
     /**
      Sets up constraints for the favoriteButton of this TVCell.
      */
@@ -169,17 +175,6 @@ class TVCell: UICollectionViewCell {
             favoriteButton.rightAnchor.constraint(equalTo: imageView.rightAnchor, constant: -(favoriteButtonHeight/10)),
             favoriteButton.heightAnchor.constraint(equalToConstant: favoriteButtonHeight),
             favoriteButton.widthAnchor.constraint(equalToConstant: favoriteButtonWidth)
-        ])
-    }
-    
-    /**
-     Sets up constraints for the ratingLabel of this TVCell.
-     */
-    private func ratingLabelConstraints() {
-        NSLayoutConstraint.activate([
-            ratingLabel.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor, constant: labelHeight/2),
-            ratingLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            ratingLabel.heightAnchor.constraint(equalToConstant: labelHeight)
         ])
     }
     

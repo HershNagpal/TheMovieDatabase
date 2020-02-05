@@ -122,7 +122,9 @@ class SearchCollection: UIView, UICollectionViewDelegateFlowLayout {
             //Case Movie
             cell.typeLabel.text = "Movie"
             cell.titleLabel.text = item.title
-            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
+            if item.vote_average != nil {
+                cell.ratingView.widthAnchor.constraint(equalToConstant: cell.ratingView.calculateWidth(item: item)).isActive = true
+            }
             
         } else if(item.known_for_department != nil) {
             //Case Actor
@@ -133,41 +135,48 @@ class SearchCollection: UIView, UICollectionViewDelegateFlowLayout {
             //Case Show
             cell.typeLabel.text = "Show"
             cell.titleLabel.text = item.name
-            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
-            
+            if item.vote_average != nil {
+                cell.ratingView.widthAnchor.constraint(equalToConstant: cell.ratingView.calculateWidth(item: item)).isActive = true
+            }
         }
     }
     
     /**
      Applies the image retrieved using the getImage method to the cell
      */
-    private func getCellImage (cell: TVCell, item: TVItem) {
-            if item.poster_path != "" && item.poster_path != nil {
-                getImage(searchTerms: item.poster_path!) { (result) in
-                    switch result {
-                        case .failure(let error):
-                           print(error)
-                        case .success(let data):
-                            DispatchQueue.main.async {
+    private func getCellImage(cell: TVCell, item: TVItem) {
+        let tag = cell.tag
+        if let path = item.poster_path, !path.isEmpty {
+            getImage(searchTerms: path) { (result) in
+                switch result {
+                    case .failure(let error):
+                       print(error)
+                    case .success(let data):
+                        DispatchQueue.main.async {
+                            if tag == cell.tag {
                                 cell.imageView.image = UIImage(data: data)
                                 cell.titleLabel.text = ""
                         }
                     }
                 }
-            } else if item.profile_path != "" && item.profile_path != nil {
-                getImage(searchTerms: item.profile_path!) { (result) in
-                    switch result {
-                        case .failure(let error):
-                           print(error)
-                        case .success(let data):
-                            DispatchQueue.main.async {
+            }
+        } else if let path = item.profile_path, !path.isEmpty  {
+            let tag = cell.tag
+            getImage(searchTerms: path) { (result) in
+                switch result {
+                    case .failure(let error):
+                       print(error)
+                    case .success(let data):
+                        DispatchQueue.main.async {
+                            if tag == cell.tag {
                                 cell.imageView.image = UIImage(data: data)
-    //                            cell.titleLabel.text = ""
+//                                cell.titleLabel.text = ""
                         }
                     }
                 }
             }
         }
+    }
 }
 
 extension SearchCollection: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -184,6 +193,7 @@ extension SearchCollection: UICollectionViewDelegate, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: searchCellID, for: indexPath) as! TVCell
         let item = searchItems[indexPath.row]
+        cell.tag = indexPath.row
         setCellDefaults(cell: cell, item: item)
         getCellImage(cell: cell, item: item)
         return cell

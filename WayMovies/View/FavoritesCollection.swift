@@ -159,7 +159,6 @@ class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
             //Case Movie
             cell.typeLabel.text = "Movie"
             cell.titleLabel.text = item.title
-            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
             
         } else if(item.known_for_department != nil) {
             //Case Actor
@@ -170,7 +169,6 @@ class FavoritesCollection: UIView, UICollectionViewDelegateFlowLayout {
             //Case Show
             cell.typeLabel.text = "Show"
             cell.titleLabel.text = item.name
-            cell.ratingLabel.text = "Average Rating: \(String(item.vote_average!))"
             
         }
     }

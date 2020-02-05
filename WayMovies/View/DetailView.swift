@@ -72,16 +72,6 @@ class DetailView: UIView {
         return ratingView
     }()
     
-    // The label showing the average rating of the show or movie
-//    let ratingLabel: UILabel = {
-//        let label = UILabel()
-//        label.textAlignment = .center
-//        label.textColor = .white
-//        label.translatesAutoresizingMaskIntoConstraints = false
-////        label.text = "5/5"
-//        return label
-//    }()
-    
     /**
      Calls the API retrieval of the poster image of a TVItem in the Request class and returns the image location when escaping
      */
@@ -89,14 +79,6 @@ class DetailView: UIView {
         Request.getImage(searchTerms: searchTerms) { result in
             completion(result)
         }
-    }
-    
-    /**
-     Calculates the width of the star rating based on the given TVItem
-     `Parameter item: The TVItem which holds the rating`
-     */
-    private func calculateWidth(item:TVItem) -> CGFloat {
-        return CGFloat( ((item.vote_average!/10)*(40*5)) )
     }
     
     /**
@@ -108,9 +90,7 @@ class DetailView: UIView {
             //Case Movie
             typeLabel.text = "MOVIE"
             titleLabel.text = item.title
-//            ratingLabel.text = "Average User Rating: \(String(item.vote_average!))"
-            ratingView.widthAnchor.constraint(equalToConstant: calculateWidth(item: item)).isActive = true
-            print(calculateWidth(item: item))
+            ratingView.widthAnchor.constraint(equalToConstant: ratingView.calculateWidth(item: item)).isActive = true
             imageView.image = UIImage(named: "movie_default.jpg")
         } else if(item.known_for_department != nil) {
             //Case Actor
@@ -121,8 +101,7 @@ class DetailView: UIView {
             //Case Show
             typeLabel.text = "SHOW"
             titleLabel.text = item.name
-//            ratingLabel.text = "Average User Rating: \(String(item.vote_average!))"
-            ratingView.widthAnchor.constraint(equalToConstant: calculateWidth(item: item)).isActive = true
+            ratingView.widthAnchor.constraint(equalToConstant: ratingView.calculateWidth(item: item)).isActive = true
             imageView.image = UIImage(named: "movie_default.jpg")
         }
         
@@ -217,19 +196,9 @@ class DetailView: UIView {
         NSLayoutConstraint.activate([
             ratingView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
             ratingView.leftAnchor.constraint(equalTo: typeLabel.rightAnchor, constant: 20),
-//            ratingView.widthAnchor.constraint(equalToConstant: 500),
-            ratingView.heightAnchor.constraint(equalToConstant: labelHeight)
+            ratingView.heightAnchor.constraint(equalToConstant: ratingView.getStarHeight())
         ])
     }
-    
-//    func ratingLabelConstraints() {
-//        NSLayoutConstraint.activate([
-//            ratingLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor),
-//            ratingLabel.leftAnchor.constraint(equalTo: typeLabel.rightAnchor),
-//            ratingLabel.rightAnchor.constraint(equalTo: self.rightAnchor),
-//            ratingLabel.heightAnchor.constraint(equalToConstant: labelHeight)
-//        ])
-//    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
