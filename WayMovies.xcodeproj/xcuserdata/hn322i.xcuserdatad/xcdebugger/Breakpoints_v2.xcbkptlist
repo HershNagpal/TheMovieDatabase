@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "B298C784-0D3E-4E13-BDD4-2A00D0382AF5"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "908AE111-9D15-4E21-8F2B-E3D06E519C85"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WayMovies/Request.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
+            landmarkName = "getPopularMovies(completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "908AE111-9D15-4E21-8F2B-E3D06E519C85 - 28d6614ac612c6f2"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "WayMovies.Request.searchMulti(searchTerms: Swift.String, completion: (Swift.Result&lt;Swift.Array&lt;WayMovies.TVItem&gt;, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "WayMovies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hn322i/Library/Autosave%20Information/WayMovies/WayMovies/Request.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "1009">
+               </Location>
+               <Location
+                  uuid = "908AE111-9D15-4E21-8F2B-E3D06E519C85 - 803400c058730b8f"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in WayMovies.Request.searchMulti(searchTerms: Swift.String, completion: (Swift.Result&lt;Swift.Array&lt;WayMovies.TVItem&gt;, Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "WayMovies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hn322i/Library/Autosave%20Information/WayMovies/WayMovies/Request.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "42"
+                  endingLineNumber = "42"
+                  offsetFromSymbolStart = "240">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
