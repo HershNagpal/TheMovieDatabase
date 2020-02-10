@@ -15,9 +15,7 @@ class BrowseViewController: UIViewController {
     
     // Height of each collection in the scroll view
     private let collectionHeight:CGFloat = 250
-    
-//    var refreshControl = UIRefreshControl()
-    
+        
     // The scrolling view of all the collection views on the screen
     private let scrollView:UIScrollView = {
         let scrollView = UIScrollView()
@@ -32,7 +30,7 @@ class BrowseViewController: UIViewController {
         table.rowHeight = 40
         table.separatorStyle = .singleLine
         table.backgroundColor = .clear
-        table.tableFooterView = UIView(frame: CGRect.zero)
+        table.tableFooterView = UIView(frame: .zero)
         table.isScrollEnabled = false
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
@@ -110,6 +108,9 @@ class BrowseViewController: UIViewController {
         self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: green]
         self.navigationController!.navigationBar.tintColor = green
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Favorites", style: .done, target: self, action: #selector(viewFavorites))
+//        let image = UIImage(named: "powered_rect.jpg")
+        
+//        self.navigationItem.titleView = UIImageView(image: image)
     }
     
     override func loadView() {
@@ -120,12 +121,6 @@ class BrowseViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//
-//        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-//        refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
-//        refreshControl.tintColor = green
-//        scrollView.addSubview(refreshControl)
-        
         setUpDelegates()
         createElementsAndConstraints()
     }
@@ -253,14 +248,6 @@ class BrowseViewController: UIViewController {
     @objc func viewFavorites(sender: UIBarButtonItem) {
         navigationController?.pushViewController(FavoritesViewController(), animated: true)
     }
-    
-//    @objc func refresh() {
-//        for collection in collectionList {
-//            collection.TVCollection.reloadData()
-//        }
-//        refreshControl.endRefreshing()
-//    }
-    
 }
 
 extension BrowseViewController: NavigationDelegate {
