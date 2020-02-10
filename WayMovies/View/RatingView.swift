@@ -47,7 +47,10 @@ class RatingView: UIView {
      `Parameter item: The TVItem which holds the rating`
      */
     func calculateWidth(item:TVItem) -> CGFloat {
-        return CGFloat( ((item.vote_average!/10)*Double(Int(starWidth)*starList.count)) )
+        if let rating = item.vote_average {
+            return CGFloat( (rating/10)*Double(Int(starWidth)*starList.count) )
+        }
+        return .zero
     }
     
     /**

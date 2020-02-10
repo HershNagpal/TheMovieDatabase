@@ -28,7 +28,10 @@ class MiniRatingView: RatingView {
      `Parameter item: The TVItem which holds the rating`
      */
     override func calculateWidth(item:TVItem) -> CGFloat {
-        return CGFloat( ((item.vote_average!/10)*Double(Int(miniStarWidth)*starList.count)) )
+        if let rating = item.vote_average {
+            return CGFloat( (rating/10)*Double(Int(miniStarWidth)*starList.count) )
+        }
+        return .zero
     }
     
     override func createRatingStars() {

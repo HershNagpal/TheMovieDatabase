@@ -151,7 +151,7 @@ class TVCell: UICollectionViewCell {
      */
     private func typeLabelConstraints() {
         NSLayoutConstraint.activate([
-            typeLabel.bottomAnchor.constraint(equalTo: titleLabel.topAnchor),
+            typeLabel.bottomAnchor.constraint(equalTo: ratingView.topAnchor),
             typeLabel.heightAnchor.constraint(equalToConstant: labelHeight)
             
         ])

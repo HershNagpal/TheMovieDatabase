@@ -273,12 +273,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
         
         if(item.title != nil) {
             //Case Movie
-//            cell.typeLabel.text = "Movie"
             cell.titleLabel.text = item.title
-
-            if item.vote_average != nil {
-                cell.ratingView.widthAnchor.constraint(equalToConstant: cell.ratingView.calculateWidth(item: item)).isActive = true
-            }
             cell.imageView.image = UIImage(named: "movie_default.jpg")
             
         } else if(item.known_for_department != nil) {
@@ -289,11 +284,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
             
         } else {
             //Case Show
-//            cell.typeLabel.text = "Show"
             cell.titleLabel.text = item.name
-            if item.vote_average != nil {
-                cell.ratingView.widthAnchor.constraint(equalToConstant: cell.ratingView.calculateWidth(item: item)).isActive = true
-            }
             cell.imageView.image = UIImage(named: "movie_default.jpg")
             
         }
@@ -313,6 +304,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
                         DispatchQueue.main.async {
                             if tag == cell.tag {
                                 cell.imageView.image = UIImage(data: data)
+                                cell.ratingView.widthAnchor.constraint(equalToConstant: cell.ratingView.calculateWidth(item: item)).isActive = true
                                 cell.titleLabel.text = ""
                         }
                     }
@@ -328,7 +320,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
                         DispatchQueue.main.async {
                             if tag == cell.tag {
                                 cell.imageView.image = UIImage(data: data)
-//                                cell.titleLabel.text = ""
+                                cell.ratingView.widthAnchor.constraint(equalToConstant: cell.ratingView.calculateWidth(item: item)).isActive = true
                         }
                     }
                 }
