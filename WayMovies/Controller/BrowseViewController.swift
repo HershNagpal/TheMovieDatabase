@@ -74,7 +74,7 @@ class BrowseViewController: UIViewController {
     // The black background view
     private let backgroundView:UIView = {
         let view = UIView()
-        view.backgroundColor = blue
+        view.backgroundColor = Colors.blue
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -105,8 +105,8 @@ class BrowseViewController: UIViewController {
     private func setUpNavBar() {
         self.navigationController!.navigationBar.barStyle = .black
         self.navigationController!.navigationBar.isTranslucent = true
-        self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: green]
-        self.navigationController!.navigationBar.tintColor = green
+        self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: Colors.green]
+        self.navigationController!.navigationBar.tintColor = Colors.green
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Favorites", style: .done, target: self, action: #selector(viewFavorites))
 //        let image = UIImage(named: "powered_rect.jpg")
         

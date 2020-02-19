@@ -21,7 +21,7 @@ class FavoritesViewController: UIViewController {
     // The background of the view
     let backgroundView:UIView = {
         let view = UIView()
-        view.backgroundColor = blue
+        view.backgroundColor = Colors.blue
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

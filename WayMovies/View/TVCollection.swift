@@ -46,7 +46,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: CGRect(x:0, y:0, width:0, height:0), collectionViewLayout: layout)
         layout.scrollDirection = .horizontal
-        collection.backgroundColor = blue
+        collection.backgroundColor = Colors.blue
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.isScrollEnabled = true
         return collection
@@ -56,7 +56,7 @@ class TVCollection: UIView, UICollectionViewDelegateFlowLayout {
     let TVCollectionLabel:UILabel = {
         let label = UILabel()
         label.text = ""
-        label.textColor = translucent_green
+        label.textColor = Colors.translucentGreen
         label.font = label.font.withSize(25)
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false

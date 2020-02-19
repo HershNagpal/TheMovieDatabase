@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import WayMovies
+//@testable import WayMovies
 
 class WayMoviesTests: XCTestCase {
 

@@ -41,11 +41,10 @@ class MiniRatingView: RatingView {
                 let image = UIImageView()
                 image.image = UIImage(named: "star.png")
                 image.clipsToBounds = true
-                image.image = image.image?.withTintColor(yellow)
+                image.image = image.image?.withTintColor(Colors.yellow)
                 image.translatesAutoresizingMaskIntoConstraints = false
                 return image
             }()
-//            self.addSubview(star)
             starList.append(star)
             self.addSubview(starList[i])
             if i == 0 {

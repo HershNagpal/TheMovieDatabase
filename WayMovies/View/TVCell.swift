@@ -86,8 +86,8 @@ class TVCell: UICollectionViewCell {
 //        button.backgroundColor = .magenta
         button.addTarget(self, action: #selector(favoriteButtonClicked), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "love.png")?.withTintColor(red), for: .selected)
-        button.setImage(UIImage(named: "love.png")?.withTintColor(gray), for: .normal)
+        button.setImage(UIImage(named: "love.png")?.withTintColor(Colors.red), for: .selected)
+        button.setImage(UIImage(named: "love.png")?.withTintColor(Colors.gray), for: .normal)
         
         return button
     }()

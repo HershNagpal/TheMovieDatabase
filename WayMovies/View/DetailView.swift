@@ -56,11 +56,11 @@ class DetailView: UIView {
     let typeLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.textColor = blue
+        label.textColor = Colors.blue
         label.font = label.font.withSize(40)
         let insets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         label.drawText(in: CGRect().inset(by: insets))
-        label.backgroundColor = translucent_green
+        label.backgroundColor = Colors.translucentGreen
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
