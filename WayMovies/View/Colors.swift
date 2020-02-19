@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ Contains globally used colors for the color scheme of the app
+ */
 struct Colors {
     static let gray:UIColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.7)
     static let red:UIColor = UIColor(red: 0.7, green: 0.05, blue: 0.05, alpha: 0.9)

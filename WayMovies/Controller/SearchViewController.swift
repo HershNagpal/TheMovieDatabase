@@ -27,14 +27,9 @@ class SearchViewController: UIViewController {
     
     
     // The table which displays categorized search suggestions
-    private let suggestionTable:UITableView = {
-        let table = UITableView()
-        table.rowHeight = 40
-        table.separatorStyle = .singleLine
+    private let suggestionTable:SuggestedSearchView = {
+        let table = SuggestedSearchView()
         table.translatesAutoresizingMaskIntoConstraints = false
-        table.tableFooterView = UIView(frame: CGRect.zero)
-        table.isScrollEnabled = false
-        table.backgroundColor = .clear
         return table
     }()
     
@@ -94,9 +89,6 @@ class SearchViewController: UIViewController {
     private func setUpDelegates() {
         searchBar.delegate = self
         searchCollection.navDelegate = self
-        suggestionTable.delegate = self
-        suggestionTable.dataSource = self
-        suggestionTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
     /**
@@ -273,7 +265,6 @@ extension SearchViewController: UISearchBarDelegate {
      */
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText != "" {
-            suggestionTable.reloadData()
             suggestionTable.isHidden = false
         } else {
             suggestionTable.isHidden = true
